@@ -1,0 +1,41 @@
+{
+    "name": "Get Restaurants List for User",
+    "priority": 2,
+    "request": {
+        "method": "GET",
+        "urlPath": "/api/v1/restaurants",
+        "queryParameters": {
+            "minRating": {
+                "matches": ".*"
+            }
+        }
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "delayDistribution": {
+            "type": "lognormal",
+            "median": 500,
+            "sigma": 0.4
+        },
+        "jsonBody": {
+            "pagination": { "total_count": 19 },
+            "restaurants": [
+                {
+                    "name": "Pizza Hut",
+                    "id": 1,
+                    "avg_rating": 4.95,
+                    "ownerId": "1"
+                },
+                {
+                    "name": "KFC",
+                    "id": 2,
+                    "avg_rating": 4.85,
+                    "ownerId": "1"
+                }
+            ]
+        }
+    }
+}

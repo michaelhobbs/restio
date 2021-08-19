@@ -1,0 +1,27 @@
+{
+    "name": "User role login",
+    "request": {
+        "method": "POST",
+        "urlPath": "/api/v1/users/login",
+        "bodyPatterns": [
+            {
+                "equalToJson": {
+                    "name": "slow",
+                    "password": "123"
+                }
+            }
+        ]
+    },
+    "response": {
+        "status": 200,
+        "fixedDelayMilliseconds": 2000,
+        "jsonBody": {
+            "user": {
+                "name": "User slow",
+                "id": 4,
+                "role": "User"
+            },
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6InVzZXIiLCJpYXQiOjE1MTYyMzkwMjIsInJvbGUiOiJVc2VyIn0.Ml36XwKUuZv_UDd-XVuW_OAS5HwYstqTZHMrxwSD2ow"
+        }
+    }
+}

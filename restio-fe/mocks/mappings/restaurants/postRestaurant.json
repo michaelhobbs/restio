@@ -1,0 +1,14 @@
+{
+    "request": {
+        "method": "POST",
+        "urlPathPattern": "/api/v1/restaurants"
+    },
+    "response": {
+        "status": 201,
+        "delayDistribution": {
+            "type": "lognormal",
+            "median": 400,
+            "sigma": 0.4
+        }
+    }
+}

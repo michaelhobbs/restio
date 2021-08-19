@@ -1,0 +1,41 @@
+{
+    "name": "Get Pending Reviews for a Restaurant",
+    "request": {
+        "method": "GET",
+        "urlPathPattern": "/api/v1/restaurants/[0-9]+/pendingReviews"
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "delayDistribution": {
+            "type": "lognormal",
+            "median": 800,
+            "sigma": 0.4
+        },
+        "jsonBody": {
+            "pagination": { "total_count": 19 },
+            "reviews": [
+                {
+                    "rating": 5,
+                    "comment": "Simply fantastic!",
+                    "date": "2017-07-21",
+                    "id": "1"
+                },
+                {
+                    "rating": 0,
+                    "comment": "Worst food ever!",
+                    "date": "2018-07-21",
+                    "id": "2"
+                },
+                {
+                    "rating": 4,
+                    "comment": "Pretty good for the price.",
+                    "date": "2019-07-21",
+                    "id": "3"
+                }
+            ]
+        }
+    }
+}

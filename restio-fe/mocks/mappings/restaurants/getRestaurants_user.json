@@ -1,0 +1,85 @@
+{
+    "name": "Get Restaurants List for User",
+    "request": {
+        "method": "GET",
+        "urlPath": "/api/v1/restaurants"
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "delayDistribution": {
+            "type": "lognormal",
+            "median": 250,
+            "sigma": 0.4
+        },
+        "jsonBody": {
+            "pagination": { "total_count": 19 },
+            "restaurants": [
+                {
+                    "name": "Pizza Hut",
+                    "id": 1,
+                    "avg_rating": 4.95,
+                    "ownerId": 1
+                },
+                {
+                    "name": "KFC",
+                    "id": 2,
+                    "avg_rating": 4.85,
+                    "ownerId": "1"
+                },
+                {
+                    "name": "Burger King",
+                    "id": 3,
+                    "avg_rating": 3.65,
+                    "ownerId": 1
+                },
+                {
+                    "name": "Pizza Hit",
+                    "id": 4,
+                    "avg_rating": 4.95,
+                    "ownerId": "1"
+                },
+                {
+                    "name": "KFO",
+                    "id": 5,
+                    "avg_rating": 4.85,
+                    "ownerId": "1"
+                },
+                {
+                    "name": "Burger Kung",
+                    "id": 6,
+                    "avg_rating": 3.65,
+                    "ownerId": 1
+                },
+
+                {
+                    "name": "Pizza Hot",
+                    "id": 7,
+                    "avg_rating": 4.95,
+                    "ownerId": 4
+                },
+                {
+                    "name": "KFG",
+                    "id": 8,
+                    "avg_rating": 4.85,
+                    "ownerId": "1"
+                },
+                {
+                    "name": "Burger Kang",
+                    "id": 9,
+                    "avg_rating": 3.65,
+                    "ownerId": 8
+                },
+
+                {
+                    "name": "Pizza Place",
+                    "id": 10,
+                    "avg_rating": 3.95,
+                    "ownerId": "1"
+                }
+            ]
+        }
+    }
+}

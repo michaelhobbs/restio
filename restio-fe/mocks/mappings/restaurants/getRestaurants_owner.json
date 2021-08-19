@@ -1,0 +1,42 @@
+{
+    "name": "Get Restaurants List for Owner",
+    "priority": 2,
+    "request": {
+        "method": "GET",
+        "urlPath": "/api/v1/restaurants",
+        "headers": {
+            "Authorization": {
+                "contains": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkxIiwibmFtZSI6Im93bmVyIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlIjoiT3duZXIifQ.aHBhKIMe4d56dvSE1yAuKZ5hCu1aRgivycPBcYeuihA"
+            }
+        }
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "delayDistribution": {
+            "type": "lognormal",
+            "median": 250,
+            "sigma": 0.4
+        },
+        "jsonBody": {
+            "pagination": { "total_count": 19 },
+            "restaurants": [
+                {
+                    "name": "Pizza Hut",
+                    "id": 1,
+                    "avg_rating": 4.95,
+                    "pendingReplies": 3,
+                    "ownerId": "1"
+                },
+                {
+                    "name": "Burger King",
+                    "id": 3,
+                    "avg_rating": 3.65,
+                    "ownerId": "1"
+                }
+            ]
+        }
+    }
+}

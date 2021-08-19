@@ -1,0 +1,79 @@
+{
+    "priority": 2,
+    "name": "Get Restaurants List for User, page 2",
+    "request": {
+        "method": "GET",
+        "url": "/api/v1/restaurants?_page=1&_limit=10"
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "delayDistribution": {
+            "type": "lognormal",
+            "median": 2500,
+            "sigma": 0.4
+        },
+        "jsonBody": {
+            "pagination": { "total_count": 19 },
+            "restaurants": [
+                {
+                    "name": "Pizza Hut",
+                    "id": 11,
+                    "avg_rating": 4.95,
+                    "ownerId": "1"
+                },
+                {
+                    "name": "KFC",
+                    "id": 12,
+                    "avg_rating": 4.85,
+                    "ownerId": "1"
+                },
+                {
+                    "name": "Burger King",
+                    "id": 13,
+                    "avg_rating": 3.65,
+                    "ownerId": "1"
+                },
+                {
+                    "name": "Pizza Hit",
+                    "id": 14,
+                    "avg_rating": 4.95,
+                    "ownerId": "1"
+                },
+                {
+                    "name": "KFO",
+                    "id": 15,
+                    "avg_rating": 4.85,
+                    "ownerId": "1"
+                },
+                {
+                    "name": "Burger Kung",
+                    "id": 16,
+                    "avg_rating": 3.65,
+                    "ownerId": "1"
+                },
+
+                {
+                    "name": "Pizza Hot",
+                    "id": 17,
+                    "avg_rating": 4.95,
+                    "ownerId": "1"
+                },
+                {
+                    "name": "KFG",
+                    "id": 18,
+                    "avg_rating": 4.85,
+                    "ownerId": "1"
+                },
+                {
+                    "name": "Burger Kang",
+                    "id": 19,
+                    "avg_rating": 3.65,
+                    "ownerId": "1"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,820 @@
+openapi: 3.0.0
+info:
+    title: Restio API
+    description: Restaurant Review API
+    version: 0.0.0
+servers:
+    - url: http://localhost:4000/api/v1
+      description: JSON-server defaul
+    - url: http://localhost:4001/api/v1
+      description: JSON-server custom
+    - url: http://localhost:8080/api/v1
+      description: Wiremock
+paths:
+    /users:
+        get:
+            tags:
+                - users
+            summary: Gets all Users. Paginated.
+            operationId: getUsers
+            parameters:
+                - $ref: '#/components/parameters/pageParam'
+                - $ref: '#/components/parameters/limitParam'
+            responses:
+                '200':
+                    description: The list of Users and pagination properties.
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    users:
+                                        type: array
+                                        title: users
+                                        description: The list of users.
+                                        items:
+                                            $ref: '#/components/schemas/User'
+                                    pagination:
+                                        $ref: '#/components/schemas/Pagination'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                '403':
+                    $ref: '#/components/responses/ForbiddenError'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: [Admin]
+        post:
+            tags:
+                - users
+            summary: Create a new User
+            operationId: postUser
+            requestBody:
+                description: A JSON object containing user credentials
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserSignUpCredentials'
+
+            responses:
+                '201':
+                    description: Created
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserAuth'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+    /users/{userId}:
+        put:
+            tags:
+                - users
+            summary: Update a user.
+            operationId: updateUser
+            parameters:
+                - name: userId
+                  in: path
+                  required: true
+                  description: The ID of the user.
+                  schema:
+                      type: integer
+                      format: int32
+                      minimum: 1
+            requestBody:
+                description: A JSON object containing the User
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/User'
+            responses:
+                '200':
+                    description: Updated
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                '403':
+                    $ref: '#/components/responses/ForbiddenError'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: [Admin]
+        delete:
+            tags:
+                - users
+            summary: Delete a user.
+            operationId: deleteUser
+            parameters:
+                - name: userId
+                  in: path
+                  required: true
+                  description: The ID of the user.
+                  schema:
+                      type: integer
+                      format: int32
+                      minimum: 1
+            responses:
+                '200':
+                    description: Deleted
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                '403':
+                    $ref: '#/components/responses/ForbiddenError'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: [Admin]
+    /users/login:
+        post:
+            tags:
+                - users
+            summary: Logs user into the system
+            operationId: loginUser
+            requestBody:
+                $ref: '#/components/requestBodies/UserCredentials'
+            responses:
+                200:
+                    description: successful operation
+                    headers:
+                        X-Rate-Limit:
+                            description: calls per hour allowed by the user
+                            schema:
+                                type: integer
+                                format: int32
+                        X-Expires-After:
+                            description: date in UTC when token expires
+                            schema:
+                                type: string
+                                format: date-time
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserAuth'
+                                type: object
+                400:
+                    description: Invalid username/password supplied
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+    /users/logout:
+        get:
+            tags:
+                - users
+            summary: Logs out current logged in user session
+            operationId: logoutUser
+            responses:
+                200:
+                    description: successful operation
+            security:
+                - BearerAuth: []
+    /restaurants:
+        get:
+            tags:
+                - restaurants
+            summary: Returns the sorted list (by average rating) of restaurants that the authenticated user has permission to see.
+            operationId: getRestaurants
+            parameters:
+                - name: minRating
+                  in: query
+                  schema:
+                      type: integer
+                      format: int32
+                      minimum: 0
+                      maximum: 5
+                      example: 2
+                  description: Filter applied to average rating of restaurants. Only restaurants with an average rating >= to minRating are returned.
+                - $ref: '#/components/parameters/pageParam'
+                - $ref: '#/components/parameters/limitParam'
+            responses:
+                '200':
+                    description: The list of restaurants and pagination properties.
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    restaurants:
+                                        type: array
+                                        title: restaurants
+                                        description: The list of restaurants.
+                                        items:
+                                            $ref: '#/components/schemas/Restaurant'
+                                    pagination:
+                                        $ref: '#/components/schemas/Pagination'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: []
+        post:
+            tags:
+                - restaurants
+            summary: Create a restaurant. Owner role only.
+            operationId: postRestaurant
+            requestBody:
+                description: A JSON object containing the new restaurant
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RestaurantNew'
+            responses:
+                '201':
+                    description: Created
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: [User]
+    /restaurants/{restaurantId}:
+        get:
+            tags:
+                - restaurants
+            summary: Returns a restaurant by id.
+            operationId: getRestaurantById
+            parameters:
+                - name: restaurantId
+                  in: path
+                  required: true
+                  description: The ID of the restaurant to return.
+                  schema:
+                      type: integer
+                      format: int32
+                      minimum: 1
+            responses:
+                '200':
+                    description: The restaurant with matching id.
+                    content:
+                        application/json:
+                            schema:
+                                title: RestaurantDetails
+                                type: object
+                                properties:
+                                    restaurant:
+                                        $ref: '#/components/schemas/Restaurant'
+                                    reviews:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Review'
+                                    highestReview:
+                                        $ref: '#/components/schemas/Review'
+                                    lowestReview:
+                                        $ref: '#/components/schemas/Review'
+                                required:
+                                    - restaurant
+                                    - reviews
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: []
+        put:
+            tags:
+                - restaurants
+            summary: Update a restaurant.
+            operationId: updateRestaurant
+            parameters:
+                - name: restaurantId
+                  in: path
+                  required: true
+                  description: The ID of the restaurant.
+                  schema:
+                      type: integer
+                      format: int32
+                      minimum: 1
+            requestBody:
+                description: A JSON object containing the new restaurant
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RestaurantBase'
+            responses:
+                '200':
+                    description: Updated
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                '403':
+                    $ref: '#/components/responses/ForbiddenError'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: [Admin]
+        delete:
+            tags:
+                - restaurants
+            summary: Delete a restaurant.
+            operationId: deleteRestaurant
+            parameters:
+                - name: restaurantId
+                  in: path
+                  required: true
+                  description: The ID of the restaurant.
+                  schema:
+                      type: integer
+                      format: int32
+                      minimum: 1
+            responses:
+                '200':
+                    description: Deleted
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                '403':
+                    $ref: '#/components/responses/ForbiddenError'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: [Admin]
+    /restaurants/{restaurantId}/pendingReviews:
+        get:
+            tags:
+                - restaurants
+                - reviews
+            summary: Returns a list of unanswered reviews for a restaurant.
+            operationId: getRestaurantPendingReviews
+            parameters:
+                - name: restaurantId
+                  in: path
+                  required: true
+                  description: The ID of the restaurant.
+                  schema:
+                      type: integer
+                      format: int32
+                      minimum: 1
+                - $ref: '#/components/parameters/pageParam'
+                - $ref: '#/components/parameters/limitParam'
+            responses:
+                '200':
+                    description: Paginated reviews pending a reply from the owner.
+                    content:
+                        application/json:
+                            schema:
+                                title: PendingReviews
+                                type: object
+                                properties:
+                                    reviews:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Review'
+                                    pagination:
+                                        $ref: '#/components/schemas/Pagination'
+                                required:
+                                    - reviews
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                '403':
+                    $ref: '#/components/responses/ForbiddenError'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: [Owner]
+    /restaurants/{restaurantId}/reviews:
+        get:
+            tags:
+                - restaurants
+                - reviews
+            summary: Returns a list of reviews for a restaurant.
+            operationId: getRestaurantReviews
+            parameters:
+                - name: restaurantId
+                  in: path
+                  required: true
+                  description: The ID of the restaurant.
+                  schema:
+                      type: integer
+                      format: int32
+                      minimum: 1
+                - $ref: '#/components/parameters/pageParam'
+                - $ref: '#/components/parameters/limitParam'
+            responses:
+                '200':
+                    description: Paginated reviews.
+                    content:
+                        application/json:
+                            schema:
+                                title: Reviews
+                                type: object
+                                properties:
+                                    reviews:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Review'
+                                    pagination:
+                                        $ref: '#/components/schemas/Pagination'
+                                required:
+                                    - reviews
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                '403':
+                    $ref: '#/components/responses/ForbiddenError'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: [User]
+        post:
+            tags:
+                - restaurants
+                - reviews
+            summary: Create a review for a restaurant.
+            operationId: postReview
+            parameters:
+                - name: restaurantId
+                  in: path
+                  required: true
+                  description: The ID of the restaurant.
+                  schema:
+                      type: integer
+                      format: int32
+                      minimum: 1
+            requestBody:
+                description: A JSON object containing user review
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ReviewBase'
+            responses:
+                '201':
+                    description: Created
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: [User]
+    /reviews:
+        get:
+            tags:
+                - reviews
+            summary: Gets all Reviews. Paginated.
+            operationId: getReviews
+            parameters:
+                - $ref: '#/components/parameters/pageParam'
+                - $ref: '#/components/parameters/limitParam'
+            responses:
+                '200':
+                    description: The list of Reviews and pagination properties.
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    reviews:
+                                        type: array
+                                        title: reviews
+                                        description: The list of reviews.
+                                        items:
+                                            $ref: '#/components/schemas/Review'
+                                    pagination:
+                                        $ref: '#/components/schemas/Pagination'
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                '403':
+                    $ref: '#/components/responses/ForbiddenError'
+                '404':
+                    description: A user with the specified ID was not found.
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: [Admin]
+    /reviews/{reviewId}:
+        put:
+            tags:
+                - reviews
+            summary: Update a review.
+            operationId: updateReview
+            parameters:
+                - name: reviewId
+                  in: path
+                  required: true
+                  description: The ID of the review.
+                  schema:
+                      type: integer
+                      format: int32
+                      minimum: 1
+            requestBody:
+                description: A JSON object containing the Review
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Review'
+            responses:
+                '200':
+                    description: Updated
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                '403':
+                    $ref: '#/components/responses/ForbiddenError'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: [Admin]
+        delete:
+            tags:
+                - reviews
+            summary: Delete a review.
+            operationId: deleteReview
+            parameters:
+                - name: reviewId
+                  in: path
+                  required: true
+                  description: The ID of the review.
+                  schema:
+                      type: integer
+                      format: int32
+                      minimum: 1
+            responses:
+                '200':
+                    description: Deleted
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                '403':
+                    $ref: '#/components/responses/ForbiddenError'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: [Admin]
+    /reviews/{reviewId}/reply:
+        post:
+            tags:
+                - reviews
+            summary: Create an Owner reply for a review.
+            operationId: postReply
+            parameters:
+                - name: reviewId
+                  in: path
+                  required: true
+                  description: The ID of the review.
+                  schema:
+                      type: integer
+                      format: int32
+                      minimum: 1
+            requestBody:
+                description: A JSON object containing owner reply
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Reply'
+            responses:
+                '201':
+                    description: Created
+                '401':
+                    $ref: '#/components/responses/UnauthorizedError'
+                '403':
+                    $ref: '#/components/responses/ForbiddenError'
+                default:
+                    $ref: '#/components/responses/UnknownError'
+            security:
+                - BearerAuth: [Owner]
+
+components:
+    securitySchemes:
+        BearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+
+    parameters:
+        limitParam:
+            name: _limit
+            in: query
+            description: The number of records to return in paginated response.
+            schema:
+                type: integer
+                format: int32
+                default: 10
+        pageParam:
+            name: _page
+            in: query
+            description: The page index to return.
+            schema:
+                type: integer
+                format: int32
+                default: 0
+
+    requestBodies:
+        UserCredentials:
+            description: A JSON object containing user credentials
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/UserCredentials'
+    responses:
+        ForbiddenError:
+            description: Forbidden
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Error'
+        UnauthorizedError:
+            description: Access token is missing or invalid
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Error'
+        UnknownError:
+            description: Unexpected error
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Error'
+    schemas:
+        User:
+            title: User
+            type: object
+            properties:
+                name:
+                    type: string
+                    example: John Doe
+                email:
+                    type: string
+                    format: email
+                    example: user@example.com
+                id:
+                    type: integer
+                    format: int32
+                    minimum: 1
+                    example: 10
+                role:
+                    type: string
+                    enum: [User, Owner, Admin]
+                    example: User
+            required:
+                - name
+                - id
+                - role
+                - email
+        UserAuth:
+            title: UserAuth
+            type: object
+            properties:
+                user:
+                    $ref: '#/components/schemas/User'
+                token:
+                    type: string
+                    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlIjoiVXNlciJ9.Mmtp-X5iBnsrfEUQEHrOkcW8VCuqUOKdsuyCHJpz8E0'
+            required:
+                - user
+                - token
+        UserCredentials:
+            title: UserCredentials
+            type: object
+            properties:
+                name:
+                    description: The user name / email for login
+                    type: string
+                    example: John Doe
+                password:
+                    description: The password for login in clear text
+                    type: string
+                    format: password
+                    example: password
+            required:
+                - name
+                - password
+        UserSignUpCredentials:
+            title: UserSignUpCredentials
+            allOf:
+                - type: object
+                  required:
+                      - email
+                  properties:
+                      email:
+                          type: string
+                          format: email
+                          description: The email for the new user
+                          example: user@example.com
+                - $ref: '#/components/schemas/UserCredentials'
+        Error:
+            title: Error
+            type: object
+            properties:
+                code:
+                    type: string
+                    example: Error-101
+                message:
+                    type: string
+                    example: An error occurred. Please try again later.
+            required:
+                - code
+                - message
+        RestaurantNew:
+            title: RestaurantNew
+            type: object
+            properties:
+                name:
+                    type: string
+                    example: Pizza Hut
+            required:
+                - name
+        RestaurantBase:
+            title: RestaurantBase
+            type: object
+            properties:
+                name:
+                    type: string
+                    example: Pizza Hut
+                ownerId:
+                    type: integer
+                    format: int32
+                    minimum: 1
+                    example: 10
+            required:
+                - name
+                - ownerId
+        Restaurant:
+            title: Restaurant
+            type: object
+            allOf:
+                - $ref: '#/components/schemas/RestaurantBase'
+                - type: object
+                  properties:
+                      id:
+                          type: integer
+                          format: int32
+                          minimum: 1
+                          example: 10
+                      avg_rating:
+                          type: number
+                          format: double
+                          minimum: 0
+                          maximum: 5
+                          example: 4.75
+                      pendingReplies:
+                          type: integer
+                          format: int32
+                          minimum: 0
+                          example: 10
+                          description: Users with `Owner` role receive this optional property, which indicates how many reviews are waiting for a reply from them. `User` role users will not receive this property.
+                  required:
+                      - name
+                      - id
+        ReviewBase:
+            title: ReviewBase
+            description: The user's review input. Used to create reviews.
+            type: object
+            properties:
+                rating:
+                    type: integer
+                    format: int32
+                    minimum: 0
+                    maximum: 5
+                    example: 4
+                comment:
+                    description: user review text
+                    type: string
+                    example: The food was excellent.
+            required:
+                - rating
+                - comment
+        Reply:
+            title: Reply
+            description: Owner's reply to a review,
+            type: object
+            properties:
+                reply:
+                    type: string
+            required:
+                - reply
+        Review:
+            title: Review
+            description: Reviews are given to restaurants by users. They can be replied to by the owner of the restaurant.
+            type: object
+            allOf:
+                - type: object
+                  required:
+                      - date
+                      - id
+                  properties:
+                      id:
+                          type: integer
+                          format: int32
+                          minimum: 1
+                          example: 10
+                      date:
+                          description: Date of visit in ISO 8601
+                          type: string
+                          format: date
+                          example: '2017-07-21'
+                      ownerReply:
+                          description: Owner's reply to the review.
+                          type: string
+                          example: Thank you for your visit.
+                - $ref: '#/components/schemas/ReviewBase'
+
+        Pagination:
+            title: Pagination
+            description: Used to manage pagination
+            type: object
+            properties:
+                total_count:
+                    description: Total number of pages available.
+                    example: 250
+                    format: int32
+                    type: integer
+            required:
+                - total_count

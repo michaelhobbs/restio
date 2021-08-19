@@ -1,0 +1,148 @@
+{
+    "restaurants": {
+        "title": "Restaurants",
+        "noReviews": "no ratings yet...",
+        "latestReviews": "Latest reviews",
+        "viewDetails": "View details",
+        "writeReview": "Write a review",
+        "replyReviews": "Reply to reviews",
+        "create": {
+            "button": "Add a restaurant",
+            "title": "Create restaurant",
+            "name": {
+                "label": "Restaurant name",
+                "placeHolder": "Write your restaurant name here"
+            },
+            "ownerId": { "label": "Owner ID" },
+            "success": "Restaurant created!",
+            "addAnother": "Add another restaurant"
+        },
+        "pendingReviews": "Pending reviews",
+        "edit": "Edit restaurant"
+    },
+    "reviews": {
+        "lowest": "Lowest rated review",
+        "highest": "Highest rated review",
+        "create": {
+            "review": {
+                "button": "Send review",
+                "label": "Your review:",
+                "placeHolder": "Write your review here"
+            },
+            "reply": {
+                "button": "Send reply",
+                "label": "Your reply",
+                "placeHolder": "Write your reply here",
+                "prompt": "Write a reply",
+                "success": "Reply sent!",
+                "replyIconFallback": "Owner reply icon"
+            },
+            "rating": {
+                "label": "Select rating"
+            },
+            "date": {
+                "label": "Select date",
+                "placeHolder": "YYYY-MM-DD",
+                "helper": "YYYY-MM-DD"
+            },
+            "success": "Review created!",
+            "ownerReply": {
+                "label": "Owner reply",
+                "placeHolder": "Write the owner's reply here"
+            }
+        },
+        "comment": "Comment",
+        "ratings": {
+            "0": "Avoid",
+            "1": "Terrible",
+            "2": "Poor",
+            "3": "Ok",
+            "4": "Good",
+            "5": "Excellent"
+        },
+        "edit": "Edit Review"
+    },
+    "user": {
+        "signup": "Sign Up",
+        "login": "Log In",
+        "name": "Username or E-mail",
+        "username": "Username",
+        "email": "E-mail",
+        "password": "Password",
+        "confirmPassword": "Confirm password",
+        "logout": "Logout",
+        "role": {
+            "user": "User",
+            "owner": "Owner",
+            "admin": "Admin",
+            "label": "Role"
+        },
+        "edit": "Edit User"
+    },
+    "auth": {
+        "signup": {
+            "prompt": "Don't have an account? Sign Up"
+        },
+        "login": {
+            "prompt": "Already have an account? Log in"
+        }
+    },
+    "app": {
+        "name": "Restio",
+        "copyright": "Copyright © "
+    },
+    "common": {
+        "or": "or",
+        "selectLanguage": "Select Language",
+        "filter": {
+            "toggle": "Toggle filters",
+            "tooltip": "Filter"
+        },
+        "back": "back",
+        "goHome": "go to home",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": {
+            "title": "Delete?",
+            "message": "Deletion is immediate and permanent.",
+            "button": "Delete"
+        }
+    },
+    "error": {
+        "validation": {
+            "date": "Date format: YYYY-MM-DD",
+            "number": "Must be a number",
+            "missing": "Form is incomplete.",
+            "min": "Min value: {{min}}",
+            "max": "Max value: {{max}}",
+            "minLength": "Min length: {{min}}",
+            "maxLength": "Max length: {{max}}",
+            "required": "Required",
+            "confirmPassword": "Passwords must be the same",
+            "email": "Invalid email"
+        },
+        "savingFailed": "An error occurred. Saving Failed.",
+        "deletingFailed": "An error occurred. Saving Failed.",
+        "notfound": "Page not found",
+        "default": "Oops... An Error occurred."
+    },
+    "admin": {
+        "dashboard": "Admin Dashboard",
+        "users": {
+            "title": "Manage Users",
+            "id": "ID",
+            "name": "Name",
+            "email": "E-mail",
+            "role": "Role"
+        },
+        "restaurants": {
+            "title": "Manage Restaurants"
+        },
+        "reviews": {
+            "title": "Manage Reviews"
+        },
+        "edit": {
+            "title": "Edit"
+        }
+    }
+}

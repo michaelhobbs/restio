@@ -1,0 +1,60 @@
+{
+    "name": "Get Restaurants List for User",
+    "request": {
+        "method": "GET",
+        "urlPathPattern": "/api/v1/restaurants/[A-Za-z0-9]+"
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "delayDistribution": {
+            "type": "lognormal",
+            "median": 800,
+            "sigma": 0.4
+        },
+        "jsonBody": {
+            "restaurant": {
+                "name": "Pizza Hut",
+                "id": 1,
+                "avg_rating": 4.95,
+                "ownerId": "1"
+            },
+            "reviews": [
+                {
+                    "rating": 5,
+                    "comment": "Simply fantastic!",
+                    "date": "2017-07-21",
+                    "ownerReply": "Any time!",
+                    "id": "1"
+                },
+                {
+                    "rating": 0,
+                    "comment": "Worst food ever!",
+                    "date": "2018-07-21",
+                    "ownerReply": "We are sorry you had this experience. We are always striving to improve and take feedback seriously. We are taking measures to address the quality of the food and hope to be able to serve a higher standard going forward.",
+                    "id": "2"
+                },
+                {
+                    "rating": 4,
+                    "comment": "Pretty good for the price.",
+                    "date": "2019-07-21",
+                    "id": "3"
+                }
+            ],
+            "highestReview": {
+                "rating": 5,
+                "comment": "Simply fantastic!",
+                "date": "2017-07-21",
+                "ownerReply": "Any time!"
+            },
+            "lowestReview": {
+                "rating": 0,
+                "comment": "Worst food ever!",
+                "date": "2018-07-21",
+                "ownerReply": "We are sorry you had this experience. We are always striving to improve and take feedback seriously. We are taking measures to address the quality of the food and hope to be able to serve a higher standard going forward."
+            }
+        }
+    }
+}

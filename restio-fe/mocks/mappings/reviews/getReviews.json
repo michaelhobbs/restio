@@ -1,0 +1,42 @@
+{
+    "name": "Get Reviews",
+    "request": {
+        "method": "GET",
+        "urlPath": "/api/v1/reviews"
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "delayDistribution": {
+            "type": "lognormal",
+            "median": 650,
+            "sigma": 0.4
+        },
+        "jsonBody": {
+            "pagination": { "total_count": 3 },
+            "reviews": [
+                {
+                    "id": 1,
+                    "rating": 4,
+                    "comment": "Loved it",
+                    "date": "2019-01-01",
+                    "ownerReply": "Thanks for the visit!"
+                },
+                {
+                    "id": 2,
+                    "rating": 2,
+                    "comment": "Basic service",
+                    "date": "2019-04-24"
+                },
+                {
+                    "id": 3,
+                    "rating": 0,
+                    "comment": "DO NOT RECOMMEND",
+                    "date": "2020-11-24"
+                }
+            ]
+        }
+    }
+}

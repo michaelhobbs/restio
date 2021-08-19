@@ -1,0 +1,31 @@
+{
+    "name": "Owner role login",
+    "request": {
+        "method": "POST",
+        "urlPath": "/api/v1/users/login",
+        "bodyPatterns": [
+            {
+                "equalToJson": {
+                    "name": "owner",
+                    "password": "123"
+                }
+            }
+        ]
+    },
+    "response": {
+        "status": 200,
+        "delayDistribution": {
+            "type": "lognormal",
+            "median": 80,
+            "sigma": 0.4
+        },
+        "jsonBody": {
+            "user": {
+                "name": "Owner User",
+                "id": 2,
+                "role": "Owner"
+            },
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkxIiwibmFtZSI6Im93bmVyIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlIjoiT3duZXIifQ.aHBhKIMe4d56dvSE1yAuKZ5hCu1aRgivycPBcYeuihA"
+        }
+    }
+}

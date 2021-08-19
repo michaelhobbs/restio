@@ -1,0 +1,85 @@
+{
+    "name": "Get User List",
+    "request": {
+        "method": "GET",
+        "urlPath": "/api/v1/users"
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "delayDistribution": {
+            "type": "lognormal",
+            "median": 1250,
+            "sigma": 0.4
+        },
+        "jsonBody": {
+            "pagination": { "total_count": 1902 },
+            "users": [
+                {
+                    "name": "John Doe",
+                    "id": 1,
+                    "role": "User",
+                    "email": "1@example.com"
+                },
+                {
+                    "name": "Jane Doe",
+                    "id": 2,
+                    "role": "Admin",
+                    "email": "2@example.com"
+                },
+                {
+                    "name": "Bill Krönner",
+                    "id": 3,
+                    "role": "User",
+                    "email": "3@example.com"
+                },
+                {
+                    "name": "Jenny Hill",
+                    "id": 4,
+                    "role": "Owner",
+                    "email": "4@example.com"
+                },
+                {
+                    "name": "Ken Gilbert",
+                    "id": 5,
+                    "role": "User",
+                    "email": "5@example.com"
+                },
+                {
+                    "name": "Will Smith",
+                    "id": 6,
+                    "role": "User",
+                    "email": "6@example.com"
+                },
+
+                {
+                    "name": "Penny Dreadful",
+                    "id": 7,
+                    "role": "User",
+                    "email": "7@example.com"
+                },
+                {
+                    "name": "Another User",
+                    "id": 8,
+                    "role": "User",
+                    "email": "8@example.com"
+                },
+                {
+                    "name": "This one has a long name",
+                    "id": 9,
+                    "role": "User",
+                    "email": "9@example.com"
+                },
+
+                {
+                    "name": "Om",
+                    "id": 10,
+                    "role": "User",
+                    "email": "10@example.com"
+                }
+            ]
+        }
+    }
+}

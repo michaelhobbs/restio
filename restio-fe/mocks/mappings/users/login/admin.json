@@ -1,0 +1,31 @@
+{
+    "name": "Admin role login",
+    "request": {
+        "method": "POST",
+        "urlPath": "/api/v1/users/login",
+        "bodyPatterns": [
+            {
+                "equalToJson": {
+                    "name": "admin",
+                    "password": "123"
+                }
+            }
+        ]
+    },
+    "response": {
+        "status": 200,
+        "delayDistribution": {
+            "type": "lognormal",
+            "median": 80,
+            "sigma": 0.4
+        },
+        "jsonBody": {
+            "user": {
+                "name": "Admin User",
+                "id": 1,
+                "role": "Admin"
+            },
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkyIiwibmFtZSI6ImFkbWluIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlIjoiQWRtaW4ifQ.JibIJFLUvi0b_xlQPMpjQo79PCAQE6qRTVjUBR6d2y0"
+        }
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "request": {
+        "method": "POST",
+        "url": "/api/v1/users"
+    },
+    "response": {
+        "status": 201,
+        "jsonBody": {
+            "user": {
+                "name": "User User",
+                "id": 3,
+                "role": "User"
+            },
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6InVzZXIiLCJpYXQiOjE1MTYyMzkwMjIsInJvbGUiOiJVc2VyIn0.Ml36XwKUuZv_UDd-XVuW_OAS5HwYstqTZHMrxwSD2ow"
+        }
+    }
+}
