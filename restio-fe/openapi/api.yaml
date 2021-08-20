@@ -800,7 +800,7 @@ components:
                           type: string
                           format: date
                           example: '2017-07-21'
-                      ownerReply:
+                      reply:
                           description: Owner's reply to the review.
                           type: string
                           example: Thank you for your visit.

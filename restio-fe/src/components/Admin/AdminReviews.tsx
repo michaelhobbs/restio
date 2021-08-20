@@ -49,7 +49,7 @@ const AdminReviews = () => {
             },
             {
                 Header: 'Owner Reply',
-                accessor: 'ownerReply',
+                accessor: 'reply',
             },
         ],
         []

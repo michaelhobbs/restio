@@ -7,10 +7,10 @@ import {
     Tooltip,
     Typography,
 } from '@material-ui/core';
-import RestaurantRating from './RestaurantRating';
-import { Review } from '../../rtk-query/api.generated';
-import { Reply } from '@material-ui/icons';
 import grey from '@material-ui/core/colors/grey';
+import { Reply } from '@material-ui/icons';
+import { Review } from '../../rtk-query/api.generated';
+import RestaurantRating from './RestaurantRating';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -41,7 +41,7 @@ export const RestaurantReview = ({ review }: ReviewProps) => {
                     {review.comment}
                 </Typography>
             </Box>
-            {review.ownerReply && (
+            {review.reply && (
                 <Box display="flex" p={1} bgcolor={grey[200]}>
                     <Box mr={2}>
                         <Tooltip title="Owner reply">
@@ -51,7 +51,7 @@ export const RestaurantReview = ({ review }: ReviewProps) => {
                         </Tooltip>
                     </Box>
                     <Typography variant="body2" component="p">
-                        {review.ownerReply}
+                        {review.reply}
                     </Typography>
                 </Box>
             )}

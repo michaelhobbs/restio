@@ -5,7 +5,6 @@ import {
     CircularProgress,
     createStyles,
     makeStyles,
-    TextField,
     Theme,
     Tooltip,
 } from '@material-ui/core';
@@ -16,14 +15,14 @@ import {
 } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
 import { useState } from 'react';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import {
     Reply,
     Review,
     usePostReplyMutation,
 } from '../../rtk-query/api.generated';
-import { useRules } from '../../utils/forms';
+import { ReviewReply } from '../Inputs/Reviews';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -42,14 +41,18 @@ export const ReplyForm = ({ review }: ReplyFormProps) => {
     const { t } = useTranslation();
     const classes = useStyles();
     const [isVisible, setVisible] = useState(false);
-    const rules = useRules();
 
     const [postReply, { isLoading, isError, isSuccess }] =
         usePostReplyMutation();
 
-    const { handleSubmit, control } = useForm<Reply>({
+    const methods = useForm<Reply>({
         reValidateMode: 'onSubmit',
+        defaultValues: {
+            reply: '',
+        },
     });
+    const { handleSubmit } = methods;
+
     const onSubmit: SubmitHandler<Reply> = (data) => {
         postReply({
             reviewId: review.id,
@@ -94,62 +97,37 @@ export const ReplyForm = ({ review }: ReplyFormProps) => {
                 )}
             </Box>
             {showForm && (
-                <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                    <Box p={2}>
-                        <Controller
-                            name="reply"
-                            control={control}
-                            defaultValue={''}
-                            rules={{
-                                required: rules.required,
-                                ...rules.minLength(1),
-                                ...rules.maxLength(1000),
-                            }}
-                            render={({ field, fieldState: { error } }) => (
-                                <TextField
-                                    {...field}
-                                    id="owner-reply"
-                                    multiline
-                                    maxRows={10}
-                                    minRows={2}
-                                    required
-                                    fullWidth
-                                    variant="outlined"
-                                    onChange={field.onChange}
-                                    label={t('reviews.create.reply.label')}
-                                    placeholder={t(
-                                        'reviews.create.reply.placeHolder'
-                                    )}
-                                    disabled={isLoading}
-                                    error={!!error}
-                                    helperText={error?.message}
-                                    margin="normal"
-                                />
-                            )}
-                        />
-                    </Box>
-                    {isError && (
-                        <Box px={2} mb={1}>
-                            <Alert severity="error">
-                                {t('error.savingFailed')}
-                            </Alert>
+                <FormProvider<Reply> {...methods}>
+                    <form onSubmit={handleSubmit(onSubmit)} noValidate>
+                        <Box p={2}>
+                            <ReviewReply disabled={isLoading} />
                         </Box>
-                    )}
-                    <Box mx={2} mb={2} textAlign="end">
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            disabled={isLoading}
-                            type="submit"
-                        >
-                            {isLoading ? (
-                                <CircularProgress color="inherit" size={20} />
-                            ) : (
-                                t('reviews.create.reply.button')
-                            )}
-                        </Button>
-                    </Box>
-                </form>
+                        {isError && (
+                            <Box px={2} mb={1}>
+                                <Alert severity="error">
+                                    {t('error.savingFailed')}
+                                </Alert>
+                            </Box>
+                        )}
+                        <Box mx={2} mb={2} textAlign="end">
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                disabled={isLoading}
+                                type="submit"
+                            >
+                                {isLoading ? (
+                                    <CircularProgress
+                                        color="inherit"
+                                        size={20}
+                                    />
+                                ) : (
+                                    t('reviews.create.reply.button')
+                                )}
+                            </Button>
+                        </Box>
+                    </form>
+                </FormProvider>
             )}
         </>
     );

@@ -324,7 +324,7 @@ export type ReviewBase = {
 export type Review = {
   id: number;
   date: string;
-  ownerReply?: string;
+  reply?: string;
 } & ReviewBase;
 export type Reply = {
   reply: string;

@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputProps } from '.';
+import { Review } from '../../rtk-query/api.generated';
 import { useRules } from '../../utils/forms';
 import GenericInput from './GenericInput';
 
@@ -79,9 +80,9 @@ export const ReviewReply: FC<InputProps> = ({ disabled }) => {
     const { t } = useTranslation();
     const rules = useRules();
     return (
-        <GenericInput<{ ownerReply: string }>
+        <GenericInput<Pick<Review, 'reply'>>
             controlProps={{
-                name: 'ownerReply',
+                name: 'reply',
                 rules: {
                     ...rules.minLength(1),
                     ...rules.maxLength(1000),
