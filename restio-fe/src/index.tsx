@@ -1,28 +1,28 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-// import i18n (to bundle text resources)
-import './i18n/i18n';
-import { store } from './store/store';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { CssBaseline } from '@material-ui/core';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import { CssBaseline } from '@material-ui/core';
+import { StrictMode } from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+// import i18n (to bundle text resources)
+import './i18n/i18n';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+import { store } from './store/store';
 
 ReactDOM.render(
-    <React.StrictMode>
+    <StrictMode>
         <Provider store={store}>
             <BrowserRouter>
                 <CssBaseline />
                 <App />
             </BrowserRouter>
         </Provider>
-    </React.StrictMode>,
+    </StrictMode>,
     document.getElementById('root')
 );
 

@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 type SignUpForm = UserSignUpCredentials & { confirmPassword: string };
 
-export default function SignUp() {
+export default function SignUp(): JSX.Element {
     const classes = useStyles();
     const { extractErrorMessage } = useErrorParser();
     const { t } = useTranslation();
@@ -68,7 +68,7 @@ export default function SignUp() {
     const { handleSubmit, getValues } = methods;
 
     const onSubmit: SubmitHandler<SignUpForm> = (data) => {
-        postUser({ userSignUpCredentials: data })
+        void postUser({ userSignUpCredentials: data })
             .unwrap()
             .then(() => history.replace(from ?? ROUTES.home));
     };
@@ -122,8 +122,8 @@ export default function SignUp() {
                                     validate: (value) => {
                                         return (
                                             (Boolean(value) &&
-                                                !Boolean(
-                                                    getValues('confirmPassword')
+                                                !getValues(
+                                                    'confirmPassword'
                                                 )) ||
                                             getValues('confirmPassword') ===
                                                 value
@@ -147,9 +147,7 @@ export default function SignUp() {
                                     validate: (value) => {
                                         return (
                                             (Boolean(value) &&
-                                                !Boolean(
-                                                    getValues('password')
-                                                )) ||
+                                                !getValues('password')) ||
                                             value === getValues('password') ||
                                             errorPasswordsNotMatch
                                         );

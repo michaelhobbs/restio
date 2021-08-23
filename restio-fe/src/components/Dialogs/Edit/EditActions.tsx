@@ -1,12 +1,11 @@
-import { DialogActions, Button, CircularProgress } from '@material-ui/core';
-import { FC } from 'react';
+import { Button, CircularProgress, DialogActions } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
     handleClose: (refetch?: boolean) => void;
     isLoading: boolean;
 };
-export const EditActions: FC<Props> = ({ handleClose, isLoading }) => {
+export const EditActions = ({ handleClose, isLoading }: Props): JSX.Element => {
     const { t } = useTranslation();
     return (
         <DialogActions>

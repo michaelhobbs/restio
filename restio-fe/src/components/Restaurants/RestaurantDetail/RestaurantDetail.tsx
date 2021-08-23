@@ -1,37 +1,37 @@
 import {
     Box,
-    Typography,
+    Button,
     CircularProgress,
     IconButton,
-    Button,
+    Typography,
 } from '@material-ui/core';
 import { ArrowBackIos } from '@material-ui/icons';
 import { Pagination } from '@material-ui/lab';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useLocation, useParams } from 'react-router-dom';
+import { useDebounce } from 'use-debounce';
 import {
     useGetRestaurantByIdQuery,
     useGetRestaurantReviewsQuery,
 } from '../../../rtk-query/api.generated';
 import { useAuth } from '../../../store/hooks';
 import { UserRoles } from '../../../types/types';
-import RestaurantRating from '../RestaurantRating';
-import ReviewHighlights from '../ReviewHighlights';
-import ReviewList from '../ReviewList';
-import { useDebounce } from 'use-debounce';
 import {
     getToReviewCreate,
     RestaurantLocationProps,
     ROUTES,
 } from '../../../utils/routes';
+import RestaurantRating from '../RestaurantRating';
+import ReviewHighlights from '../ReviewHighlights';
+import ReviewList from '../ReviewList';
 
 const PER_PAGE = 10;
 type RestaurantDetailParams = {
     id: string;
 };
 
-export const RestaurantDetail = () => {
+export const RestaurantDetail = (): JSX.Element => {
     const { t } = useTranslation();
     const { id } = useParams<RestaurantDetailParams>();
 
@@ -40,7 +40,7 @@ export const RestaurantDetail = () => {
     const [page, setPage] = useState<number>(1);
     const [debouncedPage] = useDebounce(page, 300);
     const {
-        data: { restaurant, highestReview, lowestReview } = {},
+        data: { restaurant: apiRestaurant, highestReview, lowestReview } = {},
         isLoading,
         isSuccess,
     } = useGetRestaurantByIdQuery({
@@ -55,9 +55,9 @@ export const RestaurantDetail = () => {
     });
     const { user: { role } = {} } = useAuth();
 
-    const restaurantName = restaurantBase?.name ?? restaurant?.name;
-    const restaurantAvgRating =
-        restaurantBase?.avg_rating ?? restaurant?.avg_rating;
+    const restaurant = restaurantBase ?? apiRestaurant;
+    const restaurantName = restaurant?.name;
+    const restaurantAvgRating = restaurant?.avg_rating;
     const hasLoadedTitle = !!restaurantName;
     return (
         <>
@@ -86,16 +86,13 @@ export const RestaurantDetail = () => {
                             )}
                         </>
                     )}
-                    {role === UserRoles.User && (
+                    {role === UserRoles.User && restaurant && (
                         <Box mt={1}>
                             <Button
                                 variant="outlined"
                                 fullWidth
                                 component={RouterLink}
-                                to={getToReviewCreate(
-                                    Number(id),
-                                    restaurantBase ?? restaurant
-                                )}
+                                to={getToReviewCreate(Number(id), restaurant)}
                             >
                                 {t('restaurants.writeReview')}
                             </Button>

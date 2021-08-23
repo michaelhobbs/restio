@@ -37,7 +37,7 @@ type ReplyFormProps = {
     review: Review;
 };
 
-export const ReplyForm = ({ review }: ReplyFormProps) => {
+export const ReplyForm = ({ review }: ReplyFormProps): JSX.Element => {
     const { t } = useTranslation();
     const classes = useStyles();
     const [isVisible, setVisible] = useState(false);
@@ -54,7 +54,7 @@ export const ReplyForm = ({ review }: ReplyFormProps) => {
     const { handleSubmit } = methods;
 
     const onSubmit: SubmitHandler<Reply> = (data) => {
-        postReply({
+        void postReply({
             reviewId: review.id,
             reply: data,
         });

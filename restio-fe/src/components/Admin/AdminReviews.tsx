@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Column } from 'react-table';
 import {
@@ -16,12 +16,12 @@ import {
 } from '../Inputs/Reviews';
 import AdminSection from './AdminSection';
 
-const AdminReviews = () => {
+const AdminReviews: FC = () => {
     const { t } = useTranslation();
 
     const [deleteReview, deleteStatus] = useDeleteReviewMutation();
     const deleteWrapper = (review: Review) => {
-        deleteReview({ reviewId: review.id });
+        void deleteReview({ reviewId: review.id });
     };
 
     const getEditPayload = (id: number, review: Review) => ({

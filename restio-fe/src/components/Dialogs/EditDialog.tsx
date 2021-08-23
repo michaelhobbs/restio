@@ -10,6 +10,11 @@ import {
     useForm,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import {
+    UpdateRestaurantApiArg,
+    UpdateReviewApiArg,
+    UpdateUserApiArg,
+} from '../../rtk-query/api.generated';
 import { InputProps } from '../Inputs';
 import EditActions from './Edit/EditActions';
 
@@ -18,7 +23,10 @@ type EditDialogProps<T> = {
     handleClose: (refetch?: boolean) => void;
     editHook: UseMutation<any>;
     inputFields: FC<InputProps>[];
-    getEditPayload: (id: number, item: UnpackNestedValue<T>) => any;
+    getEditPayload: (
+        id: number,
+        item: UnpackNestedValue<T>
+    ) => UpdateUserApiArg | UpdateRestaurantApiArg | UpdateReviewApiArg;
 };
 
 export function EditDialog<T extends { id: number }>({
@@ -27,7 +35,7 @@ export function EditDialog<T extends { id: number }>({
     editHook,
     inputFields,
     getEditPayload,
-}: EditDialogProps<T>) {
+}: EditDialogProps<T>): JSX.Element {
     const { t } = useTranslation();
 
     const [updateT, { isLoading, isError, isSuccess }] = editHook();
@@ -44,7 +52,7 @@ export function EditDialog<T extends { id: number }>({
     });
     const { handleSubmit } = methods;
     const onSubmit: SubmitHandler<T> = (data) => {
-        updateT(getEditPayload(dialogData.id, { ...dialogData, ...data }));
+        void updateT(getEditPayload(dialogData.id, { ...dialogData, ...data }));
     };
 
     return (

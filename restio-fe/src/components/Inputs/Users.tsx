@@ -1,5 +1,5 @@
 import { TextField } from '@material-ui/core';
-import { FC, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { InputProps } from '.';
@@ -7,7 +7,7 @@ import { UserRoles } from '../../types/types';
 import { useRules } from '../../utils/forms';
 import GenericInput from './GenericInput';
 
-export function UserName({ disabled }: InputProps) {
+export const UserName = ({ disabled }: InputProps): JSX.Element => {
     const { t } = useTranslation();
     const rules = useRules();
     return (
@@ -27,8 +27,8 @@ export function UserName({ disabled }: InputProps) {
             }}
         />
     );
-}
-export const UserEmail: FC<InputProps> = ({ disabled }) => {
+};
+export const UserEmail = ({ disabled }: InputProps): JSX.Element => {
     const { t } = useTranslation();
     const rules = useRules();
     return (
@@ -50,7 +50,7 @@ export const UserEmail: FC<InputProps> = ({ disabled }) => {
         />
     );
 };
-export const UserRole: FC<InputProps> = ({ disabled }) => {
+export const UserRole = ({ disabled }: InputProps): JSX.Element => {
     const { t } = useTranslation();
     const rules = useRules();
     const userRolesOptions = useMemo(

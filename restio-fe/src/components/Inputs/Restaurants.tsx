@@ -1,10 +1,9 @@
-import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputProps } from '.';
 import { useRules } from '../../utils/forms';
 import GenericInput from './GenericInput';
 
-export const RestaurantName: FC<InputProps> = ({ disabled }) => {
+export const RestaurantName = ({ disabled }: InputProps): JSX.Element => {
     const { t } = useTranslation();
     const rules = useRules();
     return (
@@ -26,7 +25,7 @@ export const RestaurantName: FC<InputProps> = ({ disabled }) => {
     );
 };
 
-export const RestaurantOwnerId: FC<InputProps> = ({ disabled }) => {
+export const RestaurantOwnerId = ({ disabled }: InputProps): JSX.Element => {
     const { t } = useTranslation();
     const rules = useRules();
     return (

@@ -1,0 +1,5 @@
+node_modules
+build
+*generated*
+setupTests.ts
+react-table-config.d.ts

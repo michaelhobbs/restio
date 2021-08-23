@@ -6,8 +6,10 @@ import {
 } from '@material-ui/core';
 import { ArrowBackIos } from '@material-ui/icons';
 import { Alert, Pagination } from '@material-ui/lab';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useLocation, useParams } from 'react-router-dom';
+import { useDebounce } from 'use-debounce';
 import {
     api,
     useGetRestaurantPendingReviewsQuery,
@@ -16,8 +18,6 @@ import { UserRoles } from '../../../types/types';
 import { RestaurantLocationProps, ROUTES } from '../../../utils/routes';
 import RestaurantRating from '../RestaurantRating';
 import ReviewList from '../ReviewList';
-import { useDebounce } from 'use-debounce';
-import { useState } from 'react';
 
 const PER_PAGE = 3;
 
@@ -25,7 +25,7 @@ type RestaurantDetailParams = {
     id: string;
 };
 
-export const ReviewReplyForm = () => {
+export const ReviewReplyForm = (): JSX.Element => {
     const { t } = useTranslation();
     const { id } = useParams<RestaurantDetailParams>();
     const [page, setPage] = useState<number>(1);

@@ -6,7 +6,7 @@ import RestaurantDetail from './Restaurants/RestaurantDetail/RestaurantDetail';
 import RestaurantList from './Restaurants/RestaurantList/RestaurantList';
 import ReviewReplyForm from './Restaurants/ReviewReplyForm/ReviewReplyForm';
 
-function OwnerHome() {
+function OwnerHome(): JSX.Element {
     return (
         <>
             <Switch>

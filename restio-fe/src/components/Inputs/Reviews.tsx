@@ -1,11 +1,10 @@
-import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InputProps } from '.';
 import { Review } from '../../rtk-query/api.generated';
 import { useRules } from '../../utils/forms';
 import GenericInput from './GenericInput';
 
-export const ReviewComment: FC<InputProps> = ({ disabled }) => {
+export const ReviewComment = ({ disabled }: InputProps): JSX.Element => {
     const { t } = useTranslation();
     const rules = useRules();
     return (
@@ -31,7 +30,7 @@ export const ReviewComment: FC<InputProps> = ({ disabled }) => {
     );
 };
 
-export const ReviewRating: FC<InputProps> = ({ disabled }) => {
+export const ReviewRating = ({ disabled }: InputProps): JSX.Element => {
     const { t } = useTranslation();
     const rules = useRules();
     return (
@@ -54,7 +53,7 @@ export const ReviewRating: FC<InputProps> = ({ disabled }) => {
     );
 };
 
-export const ReviewDate: FC<InputProps> = ({ disabled }) => {
+export const ReviewDate = ({ disabled }: InputProps): JSX.Element => {
     const { t } = useTranslation();
     const rules = useRules();
     return (
@@ -76,7 +75,7 @@ export const ReviewDate: FC<InputProps> = ({ disabled }) => {
     );
 };
 
-export const ReviewReply: FC<InputProps> = ({ disabled }) => {
+export const ReviewReply = ({ disabled }: InputProps): JSX.Element => {
     const { t } = useTranslation();
     const rules = useRules();
     return (

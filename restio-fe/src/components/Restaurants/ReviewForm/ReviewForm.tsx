@@ -1,18 +1,18 @@
 import {
     Box,
     Button,
+    CircularProgress,
     IconButton,
     Paper,
-    Typography,
     TextField,
-    CircularProgress,
+    Typography,
 } from '@material-ui/core';
 import { ArrowBackIos } from '@material-ui/icons';
 import { Alert, Rating } from '@material-ui/lab';
 import { useState } from 'react';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import {
     api,
     ReviewBase,
@@ -24,7 +24,7 @@ import { RestaurantLocationProps } from '../../../utils/routes';
 type RestaurantDetailParams = {
     id: string;
 };
-export const ReviewForm = () => {
+export const ReviewForm = (): JSX.Element => {
     const { t } = useTranslation();
 
     const { state: { restaurant: restaurantBase } = {} } =
@@ -62,7 +62,7 @@ export const ReviewForm = () => {
         reValidateMode: 'onSubmit',
     });
     const onSubmit: SubmitHandler<ReviewBase> = (data) => {
-        postReview({
+        void postReview({
             restaurantId: Number(id),
             reviewBase: data,
         });

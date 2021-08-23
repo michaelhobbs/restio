@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Column } from 'react-table';
 import {
@@ -11,12 +11,12 @@ import {
 import { RestaurantName, RestaurantOwnerId } from '../Inputs/Restaurants';
 import AdminSection from './AdminSection';
 
-const AdminRestaurants = () => {
+const AdminRestaurants: FC = () => {
     const { t } = useTranslation();
 
     const [deleteRestaurant, deleteStatus] = useDeleteRestaurantMutation();
     const deleteWrapper = (restaurant: Restaurant) => {
-        deleteRestaurant({ restaurantId: restaurant.id });
+        void deleteRestaurant({ restaurantId: restaurant.id });
     };
 
     const getEditPayload = (id: number, restaurant: Restaurant) => ({

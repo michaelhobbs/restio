@@ -1,7 +1,11 @@
 import { Box, CircularProgress } from '@material-ui/core';
-import { Suspense, FC } from 'react';
+import { ReactNode, Suspense } from 'react';
 
-export const AppSuspense: FC = ({ children }) => {
+export const AppSuspense = ({
+    children,
+}: {
+    children: ReactNode;
+}): JSX.Element => {
     return (
         <Suspense
             fallback={

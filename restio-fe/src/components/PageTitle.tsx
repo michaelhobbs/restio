@@ -1,8 +1,8 @@
 import {
     Box,
+    CircularProgress,
     IconButton,
     Typography,
-    CircularProgress,
 } from '@material-ui/core';
 import { ArrowBackIos } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,7 @@ type Props = {
     isLoading?: boolean;
 };
 
-export const PageTitle = (props: Props) => {
+export const PageTitle = (props: Props): JSX.Element => {
     const { title, goBack, isLoading } = props;
     const { t } = useTranslation();
     return (

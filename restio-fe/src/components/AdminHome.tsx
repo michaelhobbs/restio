@@ -7,7 +7,7 @@ import AdminUsers from './Admin/AdminUsers';
 import { NoMatch } from './NoMatch';
 import PageTitle from './PageTitle';
 
-const AdminHome = () => {
+const AdminHome = (): JSX.Element => {
     const { t } = useTranslation();
 
     return (

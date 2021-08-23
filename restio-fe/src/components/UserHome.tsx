@@ -5,7 +5,7 @@ import RestaurantDetail from './Restaurants/RestaurantDetail/RestaurantDetail';
 import RestaurantList from './Restaurants/RestaurantList/RestaurantList';
 import ReviewForm from './Restaurants/ReviewForm/ReviewForm';
 
-function UserHome() {
+function UserHome(): JSX.Element {
     return (
         <Switch>
             <Route exact path={ROUTES.home} component={RestaurantList} />

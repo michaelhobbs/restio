@@ -1,13 +1,13 @@
 import { Route, Switch } from 'react-router-dom';
+import AppSuspense from './components/AppSuspense';
 import Login from './components/Auth/Login';
 import { PrivateRoute } from './components/Auth/PrivateRoute';
-import Header from './components/Header/Header';
 import SignUp from './components/Auth/Signup';
-import Home from './components/Home';
-import AppSuspense from './components/AppSuspense';
 import ErrorBoundary from './components/ErrorBoundary';
+import Header from './components/Header/Header';
+import Home from './components/Home';
 
-function App() {
+function App(): JSX.Element {
     return (
         <ErrorBoundary>
             <AppSuspense>

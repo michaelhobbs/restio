@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Column } from 'react-table';
 import {
+    GetUsersApiResponse,
     useDeleteUserMutation,
     useGetUsersQuery,
     User,
@@ -10,12 +11,12 @@ import {
 import { UserEmail, UserName, UserRole } from '../Inputs/Users';
 import AdminSection from './AdminSection';
 
-const AdminUsers = () => {
+const AdminUsers = (): JSX.Element => {
     const { t } = useTranslation();
 
     const [deleteUser, deleteStatus] = useDeleteUserMutation();
     const deleteWrapper = (user: User) => {
-        deleteUser({ userId: user.id });
+        void deleteUser({ userId: user.id });
     };
 
     const getEditPayload = (id: number, user: User) => ({
@@ -52,7 +53,7 @@ const AdminUsers = () => {
             deleteStatus={deleteStatus}
             editHook={useUpdateUserMutation}
             columns={columns}
-            apiToTableData={(data: any) => data.users}
+            apiToTableData={(data: GetUsersApiResponse) => data.users}
             title={`${t('admin.users.title')} Auto  `}
             inputFields={[UserName, UserEmail, UserRole]}
             getEditPayload={getEditPayload}

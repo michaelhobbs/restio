@@ -18,7 +18,10 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-const ReviewHighlight = ({ title, review }: ReviewHighlightProps) => {
+const ReviewHighlight = ({
+    title,
+    review,
+}: ReviewHighlightProps): JSX.Element => {
     const classes = useStyles();
     return (
         <>
@@ -48,7 +51,7 @@ type ReviewHighlightsProps = {
 export const ReviewHighlights = ({
     highestReview,
     lowestReview,
-}: ReviewHighlightsProps) => {
+}: ReviewHighlightsProps): JSX.Element => {
     const { t } = useTranslation();
     return (
         <>

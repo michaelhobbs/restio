@@ -9,20 +9,20 @@ import {
     Typography,
 } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
-import { Restaurant } from '../../rtk-query/api.generated';
 import { Link as RouterLink } from 'react-router-dom';
-import RestaurantRating from './RestaurantRating';
+import { Restaurant } from '../../rtk-query/api.generated';
 import { useAuth } from '../../store/hooks';
 import { UserRoles } from '../../types/types';
 import {
-    getToReviewCreate,
     getToRestaurantDetails,
+    getToReviewCreate,
     getToReviewReply,
 } from '../../utils/routes';
+import RestaurantRating from './RestaurantRating';
 
 type Props = { restaurant: Restaurant };
 
-export const RestaurantCard = (props: Props) => {
+export const RestaurantCard = (props: Props): JSX.Element => {
     const { t } = useTranslation();
 
     const { user: { role } = {} } = useAuth();

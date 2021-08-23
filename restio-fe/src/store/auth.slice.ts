@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { api, UserAuth } from '../rtk-query/api.generated';
+import { api, User, UserAuth } from '../rtk-query/api.generated';
 import type { RootState } from './store';
 
 const initialState: Partial<UserAuth> = {};
@@ -32,4 +32,5 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-export const selectCurrentUser = (state: RootState) => state.auth.user;
+export const selectCurrentUser = (state: RootState): User | undefined =>
+    state.auth.user;

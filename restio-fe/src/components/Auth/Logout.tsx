@@ -6,7 +6,7 @@ import { api } from '../../rtk-query/api.generated';
 import { useAppDispatch, useAuth } from '../../store/hooks';
 import { ROUTES } from '../../utils/routes';
 
-function Logout() {
+function Logout(): JSX.Element {
     const { t } = useTranslation();
     const [trigger] = api.useLazyLogoutUserQuery();
     const { user } = useAuth();

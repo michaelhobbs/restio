@@ -1,28 +1,28 @@
 import {
     Box,
-    Typography,
+    Button,
     CircularProgress,
     Grid,
     Tooltip,
-    Button,
+    Typography,
     useMediaQuery,
     useTheme,
 } from '@material-ui/core';
+import { FilterList } from '@material-ui/icons';
 import { Pagination, Rating, ToggleButton } from '@material-ui/lab';
-import RestaurantCard from '../RestaurantCard';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGetRestaurantsQuery } from '../../../rtk-query/api.generated';
-import { FilterList } from '@material-ui/icons';
 import { Link as RouterLink } from 'react-router-dom';
+import { useDebounce } from 'use-debounce';
+import { useGetRestaurantsQuery } from '../../../rtk-query/api.generated';
 import { useAuth } from '../../../store/hooks';
 import { UserRoles } from '../../../types/types';
-import { useDebounce } from 'use-debounce';
 import { ROUTES } from '../../../utils/routes';
+import RestaurantCard from '../RestaurantCard';
 
 const PER_PAGE = 3;
 
-export const RestaurantList = () => {
+export const RestaurantList = (): JSX.Element => {
     const { t } = useTranslation();
     const [filterVisible, setFilterVisible] = useState(false);
     const [ratingFilter, setRatingFilter] = useState<number | null>(null);

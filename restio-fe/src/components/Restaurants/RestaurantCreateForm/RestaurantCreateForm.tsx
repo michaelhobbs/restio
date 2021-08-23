@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import { ArrowBackIos } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
@@ -19,7 +19,7 @@ import {
 import { ROUTES } from '../../../utils/routes';
 import { RestaurantName } from '../../Inputs/Restaurants';
 
-function RestaurantCreateForm() {
+export const RestaurantCreateForm: FC = () => {
     const { t } = useTranslation();
     const [addAnother, setAddAnother] = useState(false);
 
@@ -34,7 +34,7 @@ function RestaurantCreateForm() {
     });
     const { handleSubmit, reset } = methods;
     const onSubmit: SubmitHandler<RestaurantNew> = (data) => {
-        postRestaurant({
+        void postRestaurant({
             restaurantNew: data,
         })
             .unwrap()
@@ -127,6 +127,6 @@ function RestaurantCreateForm() {
             </Box>
         </>
     );
-}
+};
 
 export default RestaurantCreateForm;

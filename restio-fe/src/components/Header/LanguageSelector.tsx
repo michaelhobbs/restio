@@ -1,5 +1,3 @@
-import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
     Button,
     ListSubheader,
@@ -7,14 +5,16 @@ import {
     MenuItem,
     Tooltip,
 } from '@material-ui/core';
-import { supportedLngs } from '../../utils/i18next';
 import { ExpandMore, Translate } from '@material-ui/icons';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { supportedLngs } from '../../utils/i18next';
 
-function LanguageSelector() {
+function LanguageSelector(): JSX.Element {
     const { t, i18n } = useTranslation();
 
     const changeLanguage = (lng: string) => {
-        i18n.changeLanguage(lng);
+        void i18n.changeLanguage(lng);
         handleClose();
     };
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

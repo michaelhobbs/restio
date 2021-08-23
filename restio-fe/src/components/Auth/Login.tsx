@@ -2,8 +2,8 @@ import {
     Avatar,
     Box,
     Button,
-    Container,
     CircularProgress,
+    Container,
     Grid,
     Link,
     makeStyles,
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Login() {
+export default function Login(): JSX.Element {
     const { t } = useTranslation();
     const { extractErrorMessage } = useErrorParser();
     const classes = useStyles();
@@ -56,7 +56,7 @@ export default function Login() {
         reValidateMode: 'onSubmit',
     });
     const onSubmit: SubmitHandler<UserCredentials> = (data) => {
-        loginUser({ userCredentials: data })
+        void loginUser({ userCredentials: data })
             .unwrap()
             .then(() => history.replace(from ?? ROUTES.home));
     };
@@ -91,8 +91,8 @@ export default function Login() {
                                 defaultValue={''}
                                 rules={{
                                     required: rules.required,
-                                    ...rules.minLength(1),
-                                    ...rules.maxLength(100),
+                                    minLength: rules?.minLength(1)?.minLength,
+                                    maxLength: rules?.maxLength(100)?.maxLength,
                                 }}
                                 render={({ field, fieldState: { error } }) => (
                                     <TextField

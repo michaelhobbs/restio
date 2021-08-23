@@ -5,7 +5,7 @@ type RatingProps = {
     rating: number;
 };
 
-export const RestaurantRating = ({ rating }: RatingProps) => {
+export const RestaurantRating = ({ rating }: RatingProps): JSX.Element => {
     return (
         <Box display="flex" alignItems="center">
             <Rating defaultValue={rating} readOnly />

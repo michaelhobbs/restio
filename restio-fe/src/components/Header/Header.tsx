@@ -8,11 +8,11 @@ import {
     Toolbar,
     Typography,
 } from '@material-ui/core';
-import { useTranslation } from 'react-i18next';
-import LanguageSelector from './LanguageSelector';
-import Logout from '../Auth/Logout';
 import { Restaurant as RestaurantIcon } from '@material-ui/icons';
+import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
+import Logout from '../Auth/Logout';
+import LanguageSelector from './LanguageSelector';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-function Header() {
+function Header(): JSX.Element {
     const { t } = useTranslation();
     const classes = useStyles();
     return (

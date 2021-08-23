@@ -1,4 +1,7 @@
 import { useTranslation } from 'react-i18next';
+
+// complex type could be defined here
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useRules = () => {
     const { t } = useTranslation();
     return {

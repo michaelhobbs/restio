@@ -19,12 +19,12 @@ type DeleteConfirmationProps<T> = {
     apiCallStatus: RequestStatusFlags;
 };
 
-export function DeleteConfirmationDialog<T extends {}>({
+export function DeleteConfirmationDialog<T extends Record<string, unknown>>({
     dialogData,
     handleClose,
     apiCall,
     apiCallStatus: { isLoading, isSuccess, isError },
-}: DeleteConfirmationProps<T>) {
+}: DeleteConfirmationProps<T>): JSX.Element {
     const { t } = useTranslation();
     const [closeOnSuccess, setCloseOnSuccess] = useState(false);
     useEffect(() => {

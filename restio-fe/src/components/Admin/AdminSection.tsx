@@ -19,24 +19,52 @@ import { FC, useMemo, useState } from 'react';
 import { UnpackNestedValue } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { CellProps, Column } from 'react-table';
-import { Restaurant, Review, User } from '../../rtk-query/api.generated';
+import {
+    GetRestaurantsApiResponse,
+    GetReviewsApiResponse,
+    GetUsersApiResponse,
+    Restaurant,
+    Review,
+    UpdateRestaurantApiArg,
+    UpdateReviewApiArg,
+    UpdateUserApiArg,
+    User,
+} from '../../rtk-query/api.generated';
 import DeleteConfirmationDialog from '../Dialogs/DeleteConfirmationDialog';
 import EditDialog from '../Dialogs/EditDialog';
 import { InputProps } from '../Inputs';
-import Table from '../Table/Table';
+import Table, { FetchData } from '../Table/Table';
 
 type DialogType = 'DELETE' | 'EDIT';
 
-type AdminSectionProps<T extends {}> = {
-    getHook: UseQuery<QueryDefinition<any, any, any, any, any>>;
+type AdminSectionProps<T extends Record<string, unknown>> = {
+    getHook: UseQuery<
+        QueryDefinition<
+            any,
+            any,
+            any,
+            | GetUsersApiResponse
+            | GetRestaurantsApiResponse
+            | GetReviewsApiResponse,
+            any
+        >
+    >;
     deleteWrapper: (item: T) => void;
     deleteStatus: RequestStatusFlags;
     editHook: UseMutation<any>;
     columns: Column<T>[];
-    apiToTableData: (apiResponse: any) => T[] | undefined;
+    apiToTableData: (
+        apiResponse:
+            | GetUsersApiResponse
+            | GetRestaurantsApiResponse
+            | GetReviewsApiResponse
+    ) => T[] | undefined;
     title: string;
     inputFields: FC<InputProps>[];
-    getEditPayload: (id: number, item: UnpackNestedValue<T>) => any;
+    getEditPayload: (
+        id: number,
+        item: UnpackNestedValue<T>
+    ) => UpdateUserApiArg | UpdateRestaurantApiArg | UpdateReviewApiArg;
 };
 
 function AdminSection<T extends User | Review | Restaurant>({
@@ -49,7 +77,7 @@ function AdminSection<T extends User | Review | Restaurant>({
     title,
     inputFields,
     getEditPayload,
-}: AdminSectionProps<T>) {
+}: AdminSectionProps<T>): JSX.Element {
     const { t } = useTranslation();
     const [queryParams, setQueryParams] = useState({
         _page: 0,
@@ -85,41 +113,41 @@ function AdminSection<T extends User | Review | Restaurant>({
         () => apiToTableData(data),
         [data, apiToTableData]
     );
-    const cols: Column<T>[] = useMemo(
-        () => [
+    const cols: Column<T>[] = useMemo(() => {
+        const ActionsCell = (cell: CellProps<T>) => {
+            return (
+                <Box pr={2}>
+                    <IconButton
+                        size="small"
+                        onClick={() => {
+                            setDialogData(cell.row.original);
+                            openDialog('DELETE');
+                        }}
+                    >
+                        <Delete />
+                    </IconButton>
+                    <IconButton
+                        size="small"
+                        onClick={() => {
+                            setDialogData(cell.row.original);
+                            openDialog('EDIT');
+                        }}
+                    >
+                        <Edit />
+                    </IconButton>
+                </Box>
+            );
+        };
+        return [
             ...columns,
             {
                 id: 'actions',
-                Cell: (cell: CellProps<T>) => {
-                    return (
-                        <Box pr={2}>
-                            <IconButton
-                                size="small"
-                                onClick={() => {
-                                    setDialogData(cell.row.original);
-                                    openDialog('DELETE');
-                                }}
-                            >
-                                <Delete />
-                            </IconButton>
-                            <IconButton
-                                size="small"
-                                onClick={() => {
-                                    setDialogData(cell.row.original);
-                                    openDialog('EDIT');
-                                }}
-                            >
-                                <Edit />
-                            </IconButton>
-                        </Box>
-                    );
-                },
+                Cell: ActionsCell,
             },
-        ],
-        [columns]
-    );
+        ];
+    }, [columns]);
 
-    const fetchData = ({ pageIndex, pageSize }: any) => {
+    const fetchData: FetchData<T> = ({ pageIndex, pageSize }) => {
         setQueryParams({ _page: pageIndex, _limit: pageSize });
     };
 
@@ -137,7 +165,7 @@ function AdminSection<T extends User | Review | Restaurant>({
                             columns={cols}
                             name={'table'}
                             onFetchData={fetchData}
-                            pageCount={data?.pagination?.total_count}
+                            pageCount={data?.pagination?.total_count ?? 0}
                         />
                     </TableContainer>
                 )}

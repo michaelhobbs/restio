@@ -14,7 +14,7 @@ type ReviewListProps = {
 export const ReviewList = ({
     reviews,
     variant = UserRoles.User,
-}: ReviewListProps) => {
+}: ReviewListProps): JSX.Element => {
     const { t } = useTranslation();
 
     const title =

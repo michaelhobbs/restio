@@ -5,7 +5,7 @@ import { UserRoles } from '../types/types';
 import AppSuspense from './AppSuspense';
 import { NoMatch } from './NoMatch';
 
-function Home() {
+function Home(): JSX.Element {
     const { user: { role } = {} } = useAuth();
     const UserHome = lazy(() => import('./UserHome'));
     const OwnerHome = lazy(() => import('./OwnerHome'));

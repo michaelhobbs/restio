@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-key */
+// disabled react/jsx-key because react-table relies on passing key props through spread
 import {
     Table as MuiTable,
     TableBody,
@@ -10,19 +12,29 @@ import {
 } from '@material-ui/core';
 import TablePaginationActions from '@material-ui/core/TablePagination/TablePaginationActions';
 import { PropsWithChildren, useEffect } from 'react';
-import { Column, useAsyncDebounce, usePagination, useTable } from 'react-table';
+import {
+    Column,
+    TableState,
+    useAsyncDebounce,
+    usePagination,
+    useTable,
+} from 'react-table';
+
+export type FetchData<T extends Record<string, unknown>> = (
+    tableState: Pick<TableState<T>, 'pageSize' | 'pageIndex'>
+) => void;
 
 type TableProps<T extends Record<string, unknown>> = {
     data: T[];
     columns: Column<T>[];
     name: string;
-    onFetchData: any;
-    pageCount: any;
+    onFetchData: FetchData<T>;
+    pageCount: number;
 };
 
 function Table<T extends Record<string, unknown>>(
     props: PropsWithChildren<TableProps<T>>
-) {
+): JSX.Element {
     const { data, name, columns, onFetchData, pageCount } = props;
 
     const {

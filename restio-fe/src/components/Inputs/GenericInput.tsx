@@ -18,7 +18,7 @@ export function GenericInput<T>(props: {
     label?: string;
     textFieldProps?: Partial<TextFieldProps>;
     controlProps: UseControllerProps<T>;
-}) {
+}): JSX.Element {
     const { control } = useFormContext<T>();
     const { disabled, label, controlProps, textFieldProps } = props;
     const {

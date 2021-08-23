@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 type ReviewProps = { review: Review };
 
-export const RestaurantReview = ({ review }: ReviewProps) => {
+export const RestaurantReview = ({ review }: ReviewProps): JSX.Element => {
     const classes = useStyles();
     return (
         <Box py={2}>
