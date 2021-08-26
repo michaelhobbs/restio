@@ -15,8 +15,8 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useHistory, useLocation } from 'react-router-dom';
 import {
-    usePostUserMutation,
     UserSignUpCredentials,
+    useSignUpMutation,
 } from '../../rtk-query/api.generated';
 import { useErrorParser } from '../../utils/errors';
 import { useRules } from '../../utils/forms';
@@ -52,7 +52,7 @@ export default function SignUp(): JSX.Element {
     const { t } = useTranslation();
     const history = useHistory();
     const { state: { from } = {} } = useLocation<LoginLocationProps>();
-    const [postUser, { isLoading, error }] = usePostUserMutation();
+    const [postUser, { isLoading, error }] = useSignUpMutation();
     const rules = useRules();
     const errorPasswordsNotMatch = t('error.validation.confirmPassword');
 

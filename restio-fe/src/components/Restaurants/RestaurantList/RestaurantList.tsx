@@ -20,7 +20,7 @@ import { UserRoles } from '../../../types/types';
 import { ROUTES } from '../../../utils/routes';
 import RestaurantCard from '../RestaurantCard';
 
-const PER_PAGE = 3;
+const PER_PAGE = 30;
 
 export const RestaurantList = (): JSX.Element => {
     const { t } = useTranslation();
@@ -35,7 +35,7 @@ export const RestaurantList = (): JSX.Element => {
     } = useGetRestaurantsQuery({
         minRating: ratingFilter || undefined,
         _limit: PER_PAGE,
-        _page: debouncedPage - 1,
+        _page: debouncedPage,
     });
     const theme = useTheme();
     const isXs = useMediaQuery(theme.breakpoints.down('xs'));
@@ -114,7 +114,7 @@ export const RestaurantList = (): JSX.Element => {
                 </Grid>
             )}
 
-            {pagination && (
+            {pagination && pagination.total_count > PER_PAGE && (
                 <Box my={4} justifyContent="center" display="flex">
                     <Pagination
                         count={Math.ceil(pagination.total_count / PER_PAGE)}

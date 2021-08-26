@@ -16,7 +16,7 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useHistory, useLocation } from 'react-router-dom';
 import {
-    useLoginUserMutation,
+    useLoginMutation,
     UserCredentials,
 } from '../../rtk-query/api.generated';
 import { useErrorParser } from '../../utils/errors';
@@ -49,14 +49,14 @@ export default function Login(): JSX.Element {
     const classes = useStyles();
     const history = useHistory();
     const { state: { from } = {} } = useLocation<LoginLocationProps>();
-    const [loginUser, { isLoading, error }] = useLoginUserMutation();
+    const [login, { isLoading, error }] = useLoginMutation();
     const rules = useRules();
 
     const { handleSubmit, control } = useForm<UserCredentials>({
         reValidateMode: 'onSubmit',
     });
     const onSubmit: SubmitHandler<UserCredentials> = (data) => {
-        void loginUser({ userCredentials: data })
+        void login({ userCredentials: data })
             .unwrap()
             .then(() => history.replace(from ?? ROUTES.home));
     };

@@ -1,6 +1,4 @@
 {
     "/api/v1/*": "/$1",
-    "/api/v1/users/login": "/api/v1/users",
-    "/posts/:category": "/posts?category=:category",
-    "/articles\\?id=:id": "/posts/:id"
+    "/api/v1/users/login": "/api/v1/users"
 }

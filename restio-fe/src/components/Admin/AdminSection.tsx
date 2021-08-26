@@ -80,7 +80,7 @@ function AdminSection<T extends User | Review | Restaurant>({
 }: AdminSectionProps<T>): JSX.Element {
     const { t } = useTranslation();
     const [queryParams, setQueryParams] = useState({
-        _page: 0,
+        _page: 1,
         _limit: 10,
     });
     const [dialogOpen, setDialogOpen] = useState<boolean>();
@@ -148,7 +148,7 @@ function AdminSection<T extends User | Review | Restaurant>({
     }, [columns]);
 
     const fetchData: FetchData<T> = ({ pageIndex, pageSize }) => {
-        setQueryParams({ _page: pageIndex, _limit: pageSize });
+        setQueryParams({ _page: pageIndex + 1, _limit: pageSize });
     };
 
     return (

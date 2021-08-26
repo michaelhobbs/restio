@@ -10,18 +10,18 @@ const slice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addMatcher(
-            api.endpoints.loginUser.matchFulfilled,
+            api.endpoints.login.matchFulfilled,
             (state, { payload }) => {
                 state.token = payload.token;
                 state.user = payload.user;
             }
         );
-        builder.addMatcher(api.endpoints.logoutUser.matchFulfilled, (state) => {
+        builder.addMatcher(api.endpoints.logout.matchFulfilled, (state) => {
             state.token = undefined;
             state.user = undefined;
         });
         builder.addMatcher(
-            api.endpoints.postUser.matchFulfilled,
+            api.endpoints.signUp.matchFulfilled,
             (state, { payload }) => {
                 state.token = payload.token;
                 state.user = payload.user;

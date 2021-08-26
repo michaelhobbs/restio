@@ -1,0 +1,114 @@
+{
+  "users": [
+    {
+      "name": "John Doe",
+      "email": "user@example.com",
+      "id": 1,
+      "role": "User"
+    },
+    {
+      "email": "user@example.com",
+      "name": "John Doe",
+      "password": "password",
+      "id": 2
+    },
+    {
+      "email": "user@example.com",
+      "name": "John Doe",
+      "password": "password",
+      "id": 3
+    },
+    {
+      "email": "user@example.com",
+      "name": "John Doe",
+      "password": "password",
+      "id": 4
+    },
+    {
+      "email": "user@example.com",
+      "name": "John Doe",
+      "password": "password",
+      "id": 5
+    },
+    {
+      "email": "user@example.com",
+      "name": "John Doe",
+      "password": "password",
+      "id": 6
+    },
+    {
+      "email": "user@example.com",
+      "name": "John Doe",
+      "password": "password",
+      "id": 7
+    },
+    {
+      "email": "user@example.com",
+      "name": "John Doe",
+      "password": "password",
+      "id": 8
+    },
+    {
+      "email": "user@example.com",
+      "name": "John Doe",
+      "password": "password",
+      "id": 9
+    },
+    {
+      "email": "user@example.com",
+      "name": "John Doe",
+      "password": "password",
+      "id": 10
+    },
+    {
+      "email": "user@example.com",
+      "name": "John Doe",
+      "password": "password",
+      "id": 11
+    },
+    {
+      "email": "user@example.com",
+      "name": "John Doe",
+      "password": "password",
+      "id": 12
+    },
+    {
+      "email": "user@example.com",
+      "name": "John Doe",
+      "password": "password",
+      "id": 13
+    },
+    {
+      "email": "user@example.com",
+      "name": "John Doe",
+      "password": "password",
+      "id": 14
+    }
+  ],
+  "restaurants": [
+    {
+      "id": 1,
+      "name": "Restaurant",
+      "userId": 1,
+      "avg_rating": 4.5,
+      "pendingReplies": 10
+    }
+  ],
+  "reviews": [
+    {
+      "id": 1,
+      "date": "2017-07-21",
+      "reply": "Thank you for the visit",
+      "rating": 4,
+      "comment": "Great food",
+      "restaurantId": 1
+    }
+  ],
+  "reply": [
+    {
+      "id": 1,
+      "reply": "Thank you for the visit",
+      "reviewId": 1
+    }
+  ]
+}

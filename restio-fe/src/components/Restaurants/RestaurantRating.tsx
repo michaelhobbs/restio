@@ -8,7 +8,7 @@ type RatingProps = {
 export const RestaurantRating = ({ rating }: RatingProps): JSX.Element => {
     return (
         <Box display="flex" alignItems="center">
-            <Rating defaultValue={rating} readOnly />
+            <Rating value={rating} readOnly />
             <Box ml={1} display="flex">
                 <Typography
                     variant="body2"

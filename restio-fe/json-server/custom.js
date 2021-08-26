@@ -4,16 +4,15 @@ const db = require('./index')();
 const router = jsonServer.router(db);
 const middlewares = jsonServer.defaults();
 
+const SERVER_PORT = 8080;
+
 // Set default middlewares (logger, static, cors and no-cache)
 server.use(middlewares);
 
-// Add custom routes before JSON Server router
-server.get('/echo', (req, res) => {
-    res.jsonp(req.query);
-});
 server.use(
     jsonServer.rewriter({
         '/api/v1/*': '/$1',
+        '/auth/signup': '/users',
     })
 );
 
@@ -21,102 +20,171 @@ server.use(
 // You can use the one used by JSON Server
 server.use(jsonServer.bodyParser);
 
+// Add custom routes before JSON Server router
+server.get('/auth/logout', (req, res) => {
+    res.status(200).end();
+    return;
+});
+
+server.post('/auth/login', (req, res) => {
+    const user = db.users.find(
+        (user) => user.name === req.body.name || user.email === req.body.name
+    );
+    if (user && user.password === req.body.password) {
+        const { password, ...passwordlessUser } = user;
+        res.jsonp({ token: user.id, user: passwordlessUser });
+        return;
+    } else {
+        res.sendStatus(400);
+        return;
+    }
+});
+
+// sign up is rewritten to this
+server.post('/users', (req, res, next) => {
+    req.body.role = 'User';
+    next(); // formatting response is in router.render function
+});
+
+const isAuthorized = (req) => {
+    const unprotected = req.path === '/users' && req.method === 'POST';
+    const token = req.headers.authorization;
+    return unprotected || Boolean(token);
+};
 server.use((req, res, next) => {
-    if (req.url !== '/users/login' && req.url !== '/users') {
-        const authHeader = req.headers.authorization;
-        if (!authHeader) {
-            res.sendStatus(401);
-        }
+    if (isAuthorized(req)) {
+        next();
+    } else {
+        res.sendStatus(401);
+    }
+});
 
-        if (req.method === 'DELETE' || req.method === 'PUT') {
-            const userId = authHeader.split('Bearer ')[1];
-            const user = db.users.find((user) => user.id === Number(userId));
-            if (user.role !== 'Admin') {
-                res.sendStatus(403);
-            }
-        }
+const isAllowed = (req) => {
+    const unprotected = req.path === '/users' && req.method === 'POST';
+    if (unprotected) {
+        return true;
+    }
+    const path = req.path;
+    const method = req.method;
+    const token = req.headers.authorization;
+    const userId = Number(token?.split('Bearer ')[1]);
+    const user = db.users.find((u) => u.id === userId);
+
+    if (method === 'DELETE' || req.method === 'PUT') {
+        return user.role === 'Admin';
+    }
+    if (path === '/users' && method === 'GET') {
+        return user.role === 'Admin';
+    }
+    if (path === '/restaurants' && method === 'POST') {
+        return user.role === 'Owner';
+    }
+    if (path === '/reviews/*/reply' && method === 'POST') {
+        return user.role === 'Owner';
+    }
+    if (path === '/restaurants/*/reviews' && method === 'POST') {
+        return user.role === 'User';
+    }
+    if (method === 'GET' && path.includes('/pendingReviews')) {
+        return user.role === 'Owner';
+    }
+    return Boolean(req.headers.authorization);
+};
+server.use((req, res, next) => {
+    if (isAllowed(req)) {
+        next();
+    } else {
+        res.sendStatus(403);
+    }
+});
+
+// generic error echo, if string 'error' present in request body
+server.use((req, res, next) => {
+    if (JSON.stringify(req.body).indexOf('error') >= 0) {
+        console.log('ERROR DETECTED: ', req.body);
+        res.sendStatus(501).end();
+    } else {
+        next();
+    }
+});
+
+server.get('/restaurants', (req, res, next) => {
+    const token = req.headers.authorization;
+    const userId = Number(token?.split('Bearer ')[1]);
+    const user = db.users.find((u) => u.id === userId);
+    const role = user?.role;
+
+    if (role === 'User') {
+        req.query._sort = 'avg_rating';
+        req.query.avg_rating_gte = req.query.minRating ?? '0';
+        next();
+        return;
     }
 
-    if (req.url === '/users/login') {
-        const user = db.users.find(
-            (user) =>
-                user.name === req.body.name || user.email === req.body.name
+    if (role === 'Owner') {
+        // custom impl which returns only the restaurants belonging to the authorized user
+        // returns additional field pendingReviews
+        const ownedRestaurants = db.restaurants.filter(
+            (r) => r.ownerId === user.id
         );
-        if (user && user.password === req.body.password) {
-            res.jsonp({ token: user.id, user });
-            return;
-        } else {
-            res.sendStatus(400);
-            return;
-        }
+        const page = Number(req.query._page ?? 1);
+        const limit = Number(req.query._limit ?? 10);
+        const totalCount = ownedRestaurants.length;
+        let data = ownedRestaurants.slice((page - 1) * limit, page * limit);
+        data = data.map((d) => {
+            const reviews = db.reviews.filter((rv) => rv.restaurantId === d.id);
+            const pending = reviews.filter((rv) => !rv.reply).length;
+            const avg =
+                reviews.reduce((acc, rv) => acc + rv.rating, 0) /
+                reviews.length;
+            return {
+                ...d,
+                avg_rating: Number(avg.toFixed(2)),
+                pendingReplies: pending,
+            };
+        });
+        res.jsonp({
+            restaurants: data,
+            pagination: { total_count: totalCount },
+        }).end();
+        return;
     }
+    next();
+});
 
-    if (req.url === '/users/logout') {
-        res.status(200).end();
-        return;
-    }
-    if (req.method === 'GET' && req.url.includes('/pendingReviews')) {
-        res.jsonp({
-            reviews: [
-                {
-                    id: 10,
-                    date: '2017-07-21',
-                    rating: 4,
-                    comment: 'The food was excellent.',
-                },
-                {
-                    id: 19,
-                    date: '2017-07-21',
-                    rating: 2,
-                    comment: 'The food was excellent.',
-                },
-            ],
-            pagination: {
-                total_count: 250,
-            },
-        });
-        return;
-    }
-    if (
-        req.method === 'GET' &&
-        req.url.startsWith('/restaurants/') &&
-        req.url.includes('/reviews')
-    ) {
-        res.jsonp({
-            reviews: [
-                {
-                    id: 10,
-                    date: '2017-07-21',
-                    rating: 4,
-                    comment: 'The food was excellent.',
-                    ownerReply: 'thanks for your visit',
-                },
-                {
-                    id: 19,
-                    date: '2017-07-21',
-                    rating: 2,
-                    comment: 'The food was bad.',
-                },
-                {
-                    id: 19,
-                    date: '2017-07-21',
-                    rating: 2,
-                    comment: 'The food was ok.',
-                },
-                {
-                    id: 19,
-                    date: '2017-07-21',
-                    rating: 2,
-                    comment: 'The food was excellent!!!!',
-                    ownerReply: ';-)',
-                },
-            ],
-            pagination: {
-                total_count: 250,
-            },
-        });
-        return;
-    }
+server.get('/restaurants/:restaurantId/pendingReviews', (req, res, next) => {
+    const pendingReviews = db.reviews.filter(
+        (rv) => rv.restaurantId === Number(req.params.restaurantId) && !rv.reply
+    );
+    const page = Number(req.query._page ?? 1);
+    const limit = Number(req.query._limit ?? 10);
+    const totalCount = pendingReviews.length;
+    let data = pendingReviews.slice((page - 1) * limit, page * limit);
+    res.jsonp({
+        reviews: data,
+        pagination: { total_count: totalCount },
+    }).end();
+    return;
+});
+
+server.post('/restaurants/:restaurantId/reviews', (req, res, next) => {
+    let now = new Date();
+    const offset = now.getTimezoneOffset();
+    now = new Date(now.getTime() - offset * 60 * 1000);
+    const nowStr = now.toISOString().split('T')[0];
+    req.body.date = nowStr;
+    next();
+});
+
+server.post('/reviews/:reviewId/reply', (req, res, next) => {
+    const reviewId = req.params.reviewId;
+    const review = db.reviews.find((rv) => rv.id === Number(reviewId));
+    review.reply = req.body.reply;
+    res.status(200).end();
+    return;
+});
+
+server.use((req, res, next) => {
     if (req.method === 'PUT' && req.url.startsWith('/restaurants')) {
         const restaurant = db.restaurants.find(
             (restaurant) =>
@@ -190,42 +258,44 @@ server.use((req, res, next) => {
 // fallback is original router.render
 let orender = router.render;
 router.render = (req, res) => {
+    // sign up response with token
+    if (req.method === 'POST' && req.url === '/users') {
+        const { password, confirmPassword, ...newUser } = res.locals.data;
+        res.jsonp({
+            user: { ...newUser },
+            token: res.locals.data.id,
+        });
+        return;
+    }
+
+    // pagination responses copying total_count header to response body
     if (req.method === 'GET' && req.url.startsWith('/restaurants?')) {
         res.jsonp({
             restaurants: res.locals.data,
-            pagination: { total_count: 100 },
+            pagination: { total_count: res.get('X-Total-Count') },
         });
         return;
     }
     if (req.method === 'GET' && req.url.startsWith('/users?')) {
         res.jsonp({
             users: res.locals.data,
-            pagination: { total_count: 100 },
+            pagination: { total_count: res.get('X-Total-Count') },
         });
         return;
     }
-    if (req.method === 'GET' && req.url.startsWith('/reviews?')) {
+    if (req.method === 'GET' && req.url.indexOf('/reviews') >= 0) {
         res.jsonp({
             reviews: res.locals.data,
-            pagination: { total_count: 100 },
+            pagination: { total_count: res.get('X-Total-Count') },
         });
         return;
     }
-    if (req.method === 'POST' && req.url === '/users') {
-        res.jsonp({
-            user: { ...res.locals.data, role: 'User' },
-            token: res.locals.data.id,
-        });
-        return;
-    }
+
     if (req.method === 'POST' && req.url === '/restaurants') {
         const restaurant = res.locals.data;
         const authHeader = req.headers.authorization;
         const userId = authHeader.split('Bearer ')[1];
         restaurant.ownerId = Number(userId);
-        // res.jsonp({
-        //     restaurant,
-        // });
         res.status(200).end();
         return;
     }
@@ -235,12 +305,19 @@ router.render = (req, res) => {
         req.url.split('/').length === 3 &&
         req.url.startsWith('/restaurants/')
     ) {
+        const restId = res.locals.data.id;
+        const reviews = db.reviews.filter((rev) => rev.restaurantId === restId);
+        reviews.sort((a, b) =>
+            a.rating > b.rating ? -1 : a.rating === b.rating ? 0 : 1
+        );
+        const highest = reviews?.[0];
+        const lowest =
+            reviews.length > 1 ? reviews[reviews.length - 1] : undefined;
         res.jsonp({
             restaurant: { ...res.locals.data },
-            reviews: db.reviews.slice(0, 10),
-            highestReview: db.reviews[100],
-            lowestReview: db.reviews[101],
-        });
+            highestReview: highest,
+            lowestReview: lowest,
+        }).end();
         return;
     }
     return orender(req, res);
@@ -248,7 +325,7 @@ router.render = (req, res) => {
 
 // Use default router
 server.use(router);
-// server.use('/api/v1', router);
-server.listen(8080, () => {
+
+server.listen(SERVER_PORT, () => {
     console.log('JSON Server is running');
 });

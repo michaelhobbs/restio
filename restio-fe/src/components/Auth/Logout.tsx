@@ -8,7 +8,7 @@ import { ROUTES } from '../../utils/routes';
 
 function Logout(): JSX.Element {
     const { t } = useTranslation();
-    const [trigger] = api.useLazyLogoutUserQuery();
+    const [trigger] = api.useLazyLogoutQuery();
     const { user } = useAuth();
     const appDispatch = useAppDispatch();
     const history = useHistory();

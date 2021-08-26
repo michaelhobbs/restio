@@ -51,7 +51,7 @@ export const RestaurantDetail = (): JSX.Element => {
         isFetching: isReviewsFetching,
     } = useGetRestaurantReviewsQuery({
         restaurantId: Number(id),
-        _page: debouncedPage - 1,
+        _page: debouncedPage,
     });
     const { user: { role } = {} } = useAuth();
 

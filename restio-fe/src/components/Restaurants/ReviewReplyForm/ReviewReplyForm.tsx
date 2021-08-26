@@ -19,7 +19,7 @@ import { RestaurantLocationProps, ROUTES } from '../../../utils/routes';
 import RestaurantRating from '../RestaurantRating';
 import ReviewList from '../ReviewList';
 
-const PER_PAGE = 3;
+const PER_PAGE = 10;
 
 type RestaurantDetailParams = {
     id: string;
@@ -39,7 +39,7 @@ export const ReviewReplyForm = (): JSX.Element => {
     } = useGetRestaurantPendingReviewsQuery({
         restaurantId: Number(id),
         _limit: PER_PAGE,
-        _page: debouncedPage - 1,
+        _page: debouncedPage,
     });
 
     const { state: { restaurant: restaurantBase } = {} } =
