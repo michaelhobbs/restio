@@ -1,7 +1,7 @@
 import { Box, Divider, Paper, Typography } from '@material-ui/core';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Review } from '../../rtk-query/api.generated';
+import { Review } from '../../rtk-query/api';
 import { UserRoles } from '../../types/types';
 import ReplyForm from './ReplyForm';
 import RestaurantReview from './RestaurantReview';

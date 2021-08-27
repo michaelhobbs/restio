@@ -7,7 +7,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
-import { Review } from '../../rtk-query/api.generated';
+import { Review } from '../../rtk-query/api';
 import RestaurantReview from './RestaurantReview';
 
 type ReviewHighlightProps = { title: string; review?: Review };

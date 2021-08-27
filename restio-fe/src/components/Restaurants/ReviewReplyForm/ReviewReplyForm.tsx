@@ -13,7 +13,7 @@ import { useDebounce } from 'use-debounce';
 import {
     api,
     useGetRestaurantPendingReviewsQuery,
-} from '../../../rtk-query/api.generated';
+} from '../../../rtk-query/api';
 import { UserRoles } from '../../../types/types';
 import { RestaurantLocationProps, ROUTES } from '../../../utils/routes';
 import RestaurantRating from '../RestaurantRating';

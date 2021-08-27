@@ -29,7 +29,7 @@ import {
     UpdateReviewApiArg,
     UpdateUserApiArg,
     User,
-} from '../../rtk-query/api.generated';
+} from '../../rtk-query/api';
 import DeleteConfirmationDialog from '../Dialogs/DeleteConfirmationDialog';
 import EditDialog from '../Dialogs/EditDialog';
 import { InputProps } from '../Inputs';

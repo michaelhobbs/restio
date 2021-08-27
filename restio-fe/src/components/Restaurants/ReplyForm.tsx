@@ -17,11 +17,7 @@ import { Alert } from '@material-ui/lab';
 import { useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import {
-    Reply,
-    Review,
-    usePostReplyMutation,
-} from '../../rtk-query/api.generated';
+import { Reply, Review, usePostReplyMutation } from '../../rtk-query/api';
 import { ReviewReply } from '../Inputs/Reviews';
 
 const useStyles = makeStyles((theme: Theme) =>

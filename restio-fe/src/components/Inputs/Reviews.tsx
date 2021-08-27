@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { InputProps } from '.';
-import { Review } from '../../rtk-query/api.generated';
+import { Review } from '../../rtk-query/api';
 import { useRules } from '../../utils/forms';
 import GenericInput from './GenericInput';
 

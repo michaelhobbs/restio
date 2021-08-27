@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { User } from './../rtk-query/api.generated';
+import { User } from './../rtk-query/api';
 import { selectCurrentUser } from './auth.slice';
 import type { AppDispatch, RootState } from './store';
 

@@ -2,7 +2,7 @@ import { IconButton, Tooltip } from '@material-ui/core';
 import { ExitToApp } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import { api } from '../../rtk-query/api.generated';
+import { api } from '../../rtk-query/api';
 import { useAppDispatch, useAuth } from '../../store/hooks';
 import { ROUTES } from '../../utils/routes';
 

@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
-import { Restaurant } from '../../rtk-query/api.generated';
+import { Restaurant } from '../../rtk-query/api';
 import { useAuth } from '../../store/hooks';
 import { UserRoles } from '../../types/types';
 import {

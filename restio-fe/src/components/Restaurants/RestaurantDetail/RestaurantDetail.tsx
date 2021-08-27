@@ -14,7 +14,7 @@ import { useDebounce } from 'use-debounce';
 import {
     useGetRestaurantByIdQuery,
     useGetRestaurantReviewsQuery,
-} from '../../../rtk-query/api.generated';
+} from '../../../rtk-query/api';
 import { useAuth } from '../../../store/hooks';
 import { UserRoles } from '../../../types/types';
 import {

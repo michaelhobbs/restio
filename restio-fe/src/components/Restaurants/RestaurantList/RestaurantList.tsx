@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import { useDebounce } from 'use-debounce';
-import { useGetRestaurantsQuery } from '../../../rtk-query/api.generated';
+import { useGetRestaurantsQuery } from '../../../rtk-query/api';
 import { useAuth } from '../../../store/hooks';
 import { UserRoles } from '../../../types/types';
 import { ROUTES } from '../../../utils/routes';

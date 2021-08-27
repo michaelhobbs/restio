@@ -7,7 +7,7 @@ import {
     useDeleteReviewMutation,
     useGetReviewsQuery,
     useUpdateReviewMutation,
-} from '../../rtk-query/api.generated';
+} from '../../rtk-query/api';
 import {
     ReviewComment,
     ReviewDate,

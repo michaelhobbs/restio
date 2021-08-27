@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { api, User, UserAuth } from '../rtk-query/api.generated';
+import { api, User, UserAuth } from '../rtk-query/api';
 import type { RootState } from './store';
 
 const initialState: Partial<UserAuth> = {};

@@ -14,10 +14,7 @@ import { Alert } from '@material-ui/lab';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useHistory, useLocation } from 'react-router-dom';
-import {
-    UserSignUpCredentials,
-    useSignUpMutation,
-} from '../../rtk-query/api.generated';
+import { UserSignUpCredentials, useSignUpMutation } from '../../rtk-query/api';
 import { useErrorParser } from '../../utils/errors';
 import { useRules } from '../../utils/forms';
 import { getToLogin, LoginLocationProps, ROUTES } from '../../utils/routes';

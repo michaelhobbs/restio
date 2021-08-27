@@ -14,7 +14,7 @@ import {
     UpdateRestaurantApiArg,
     UpdateReviewApiArg,
     UpdateUserApiArg,
-} from '../../rtk-query/api.generated';
+} from '../../rtk-query/api';
 import { InputProps } from '../Inputs';
 import EditActions from './Edit/EditActions';
 

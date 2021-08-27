@@ -7,7 +7,7 @@ import {
     useGetUsersQuery,
     User,
     useUpdateUserMutation,
-} from '../../rtk-query/api.generated';
+} from '../../rtk-query/api';
 import { UserEmail, UserName, UserRole } from '../Inputs/Users';
 import AdminSection from './AdminSection';
 

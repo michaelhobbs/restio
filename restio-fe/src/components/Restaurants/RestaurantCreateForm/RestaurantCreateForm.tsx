@@ -15,7 +15,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import {
     RestaurantNew,
     usePostRestaurantMutation,
-} from '../../../rtk-query/api.generated';
+} from '../../../rtk-query/api';
 import { ROUTES } from '../../../utils/routes';
 import { RestaurantName } from '../../Inputs/Restaurants';
 

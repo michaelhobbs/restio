@@ -7,7 +7,7 @@ import {
     useDeleteRestaurantMutation,
     useGetRestaurantsQuery,
     useUpdateRestaurantMutation,
-} from '../../rtk-query/api.generated';
+} from '../../rtk-query/api';
 import { RestaurantName, RestaurantOwnerId } from '../Inputs/Restaurants';
 import AdminSection from './AdminSection';
 

@@ -1,6 +1,6 @@
 import { Location, LocationDescriptor } from 'history';
 import { generatePath } from 'react-router-dom';
-import { Restaurant } from '../rtk-query/api.generated';
+import { Restaurant } from '../rtk-query/api';
 
 export type LoginLocationProps = {
     from?: Location;

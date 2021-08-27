@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import grey from '@material-ui/core/colors/grey';
 import { Reply } from '@material-ui/icons';
-import { Review } from '../../rtk-query/api.generated';
+import { Review } from '../../rtk-query/api';
 import RestaurantRating from './RestaurantRating';
 
 const useStyles = makeStyles((theme: Theme) =>

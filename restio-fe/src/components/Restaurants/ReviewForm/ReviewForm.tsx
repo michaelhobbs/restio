@@ -13,11 +13,7 @@ import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import {
-    api,
-    ReviewBase,
-    usePostReviewMutation,
-} from '../../../rtk-query/api.generated';
+import { api, ReviewBase, usePostReviewMutation } from '../../../rtk-query/api';
 import { useRules } from '../../../utils/forms';
 import { RestaurantLocationProps } from '../../../utils/routes';
 
