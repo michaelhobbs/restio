@@ -1,7 +1,7 @@
 import { api as generatedApi } from './api.generated';
 
 export const api = generatedApi.enhanceEndpoints({
-    addTagTypes: ['Restaurants'],
+    addTagTypes: ['Restaurants', 'Reviews'],
     endpoints: {
         // basic notation: just specify properties to be overridden
         getRestaurants: {
@@ -10,9 +10,28 @@ export const api = generatedApi.enhanceEndpoints({
         postRestaurant: {
             invalidatesTags: ['Restaurants'],
         },
+        postReview: {
+            invalidatesTags: ['Reviews'],
+        },
+        getReviews: {
+            providesTags: ['Reviews'],
+        },
+        postReply: {
+            invalidatesTags: ['Reviews'],
+        },
+        getRestaurantReviews: {
+            providesTags: ['Reviews'],
+        },
     },
 });
 
 export * from './api.generated';
 
-export const { useGetRestaurantsQuery, usePostRestaurantMutation } = api;
+export const {
+    useGetRestaurantsQuery,
+    usePostRestaurantMutation,
+    usePostReviewMutation,
+    useGetReviewsQuery,
+    usePostReplyMutation,
+    useGetRestaurantReviewsQuery,
+} = api;
