@@ -14,25 +14,23 @@ function Logout(): JSX.Element {
     const history = useHistory();
 
     const tooltip = t('user.logout');
-    return (
-        <>
-            {user && (
-                <Tooltip title={tooltip}>
-                    <IconButton
-                        color="inherit"
-                        aria-label={t('user.logout')}
-                        onClick={() => {
-                            trigger({});
-                            appDispatch(api.util.resetApiState()); // clear api cache
-                            history.push(ROUTES.login);
-                        }}
-                    >
-                        <ExitToApp />
-                    </IconButton>
-                </Tooltip>
-            )}
-        </>
-    );
+    return <>
+        {user && (
+            <Tooltip title={tooltip}>
+                <IconButton
+                    color="inherit"
+                    aria-label={t('user.logout')}
+                    onClick={() => {
+                        trigger({});
+                        appDispatch(api.util.resetApiState()); // clear api cache
+                        history.push(ROUTES.login);
+                    }}
+                    size="large">
+                    <ExitToApp />
+                </IconButton>
+            </Tooltip>
+        )}
+    </>;
 }
 
 export default Logout;

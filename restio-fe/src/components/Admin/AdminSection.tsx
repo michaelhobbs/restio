@@ -8,7 +8,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import { Delete, Edit } from '@material-ui/icons';
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@material-ui/core';
 import { QueryDefinition } from '@reduxjs/toolkit/dist/query';
 import { RequestStatusFlags } from '@reduxjs/toolkit/dist/query/core/apiState';
 import {

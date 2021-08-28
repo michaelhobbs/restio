@@ -8,7 +8,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import { ArrowBackIos } from '@material-ui/icons';
-import { Alert, Rating } from '@material-ui/lab';
+import { Alert, Rating } from '@material-ui/core';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -67,165 +67,163 @@ export const ReviewForm = (): JSX.Element => {
     const restaurantName =
         restaurantBase?.name ?? result?.data?.restaurant.name;
 
-    return (
-        <>
-            <Box mb={2} display="flex" alignItems="flex-start">
-                <IconButton aria-label={t('common.back')} onClick={goBack}>
-                    <ArrowBackIos />
-                </IconButton>
-                <Box>
-                    <Typography variant="h4" gutterBottom>
-                        {result?.isLoading ? (
-                            <CircularProgress size={20} />
-                        ) : (
-                            restaurantName
-                        )}
-                    </Typography>
-                </Box>
+    return <>
+        <Box mb={2} display="flex" alignItems="flex-start">
+            <IconButton aria-label={t('common.back')} onClick={goBack} size="large">
+                <ArrowBackIos />
+            </IconButton>
+            <Box>
+                <Typography variant="h4" gutterBottom>
+                    {result?.isLoading ? (
+                        <CircularProgress size={20} />
+                    ) : (
+                        restaurantName
+                    )}
+                </Typography>
             </Box>
-            <Box mt={1} width={1}>
-                <Paper>
-                    <Box p={1}>
-                        {isSuccess && (
-                            <Box px={2}>
-                                <Alert severity="success">
-                                    {t('reviews.create.success')}
-                                </Alert>
-                            </Box>
-                        )}
-                        {!isSuccess && (
-                            <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                                <Box p={2} width={1}>
-                                    <Typography component="legend">
-                                        {t('reviews.create.rating.label')} *
-                                    </Typography>
+        </Box>
+        <Box mt={1} width={1}>
+            <Paper>
+                <Box p={1}>
+                    {isSuccess && (
+                        <Box px={2}>
+                            <Alert severity="success">
+                                {t('reviews.create.success')}
+                            </Alert>
+                        </Box>
+                    )}
+                    {!isSuccess && (
+                        <form onSubmit={handleSubmit(onSubmit)} noValidate>
+                            <Box p={2} width={1}>
+                                <Typography component="legend">
+                                    {t('reviews.create.rating.label')} *
+                                </Typography>
 
-                                    <Box display="flex" alignItems="center">
-                                        <Controller
-                                            name="rating"
-                                            control={control}
-                                            defaultValue={0}
-                                            rules={{
-                                                required: rules.required,
-                                                ...rules.min(0),
-                                                ...rules.max(5),
-                                            }}
-                                            render={({
-                                                field,
-                                                fieldState: { error },
-                                            }) => (
-                                                <>
-                                                    <Rating
-                                                        {...field}
-                                                        name="rating"
-                                                        size="large"
-                                                        onChange={(
-                                                            _,
-                                                            newValue
-                                                        ) =>
-                                                            field.onChange(
-                                                                newValue ?? 0
-                                                            )
-                                                        }
-                                                        onChangeActive={(
-                                                            _,
-                                                            newHover
-                                                        ) => {
-                                                            setRatingLabels(
-                                                                newHover
-                                                            );
-                                                        }}
-                                                        disabled={isLoading}
-                                                    />
-                                                    {field.value !== null && (
-                                                        <Box ml={2}>
-                                                            {
-                                                                ratingLabels[
-                                                                    ratingLabel !==
-                                                                    -1
-                                                                        ? ratingLabel
-                                                                        : field.value
-                                                                ]
-                                                            }
-                                                        </Box>
-                                                    )}
-                                                    {error && (
-                                                        <Box m={2}>
-                                                            <Alert severity="error">
-                                                                {error.message}
-                                                            </Alert>
-                                                        </Box>
-                                                    )}
-                                                </>
-                                            )}
-                                        />
-                                    </Box>
-                                </Box>
-                                <Box p={2}>
+                                <Box display="flex" alignItems="center">
                                     <Controller
-                                        name="comment"
+                                        name="rating"
                                         control={control}
-                                        defaultValue={''}
+                                        defaultValue={0}
                                         rules={{
                                             required: rules.required,
-                                            ...rules.minLength(1),
-                                            ...rules.maxLength(1000),
+                                            ...rules.min(0),
+                                            ...rules.max(5),
                                         }}
                                         render={({
                                             field,
                                             fieldState: { error },
                                         }) => (
-                                            <TextField
-                                                {...field}
-                                                required
-                                                fullWidth
-                                                multiline
-                                                maxRows={20}
-                                                minRows={10}
-                                                variant="outlined"
-                                                onChange={field.onChange}
-                                                label={t(
-                                                    'reviews.create.review.label'
+                                            <>
+                                                <Rating
+                                                    {...field}
+                                                    name="rating"
+                                                    size="large"
+                                                    onChange={(
+                                                        _,
+                                                        newValue
+                                                    ) =>
+                                                        field.onChange(
+                                                            newValue ?? 0
+                                                        )
+                                                    }
+                                                    onChangeActive={(
+                                                        _,
+                                                        newHover
+                                                    ) => {
+                                                        setRatingLabels(
+                                                            newHover
+                                                        );
+                                                    }}
+                                                    disabled={isLoading}
+                                                />
+                                                {field.value !== null && (
+                                                    <Box ml={2}>
+                                                        {
+                                                            ratingLabels[
+                                                                ratingLabel !==
+                                                                -1
+                                                                    ? ratingLabel
+                                                                    : field.value
+                                                            ]
+                                                        }
+                                                    </Box>
                                                 )}
-                                                placeholder={t(
-                                                    'reviews.create.review.placeHolder'
+                                                {error && (
+                                                    <Box m={2}>
+                                                        <Alert severity="error">
+                                                            {error.message}
+                                                        </Alert>
+                                                    </Box>
                                                 )}
-                                                disabled={isLoading}
-                                                error={!!error}
-                                                helperText={error?.message}
-                                                margin="normal"
-                                            />
+                                            </>
                                         )}
                                     />
                                 </Box>
-                                {isError && (
-                                    <Box px={2}>
-                                        <Alert severity="error">
-                                            {t('error.default')}
-                                        </Alert>
-                                    </Box>
-                                )}
-                                <Box p={2} textAlign="end">
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        disabled={isLoading}
-                                        type="submit"
-                                    >
-                                        {isLoading ? (
-                                            <CircularProgress color="inherit" />
-                                        ) : (
-                                            t('reviews.create.review.button')
-                                        )}
-                                    </Button>
+                            </Box>
+                            <Box p={2}>
+                                <Controller
+                                    name="comment"
+                                    control={control}
+                                    defaultValue={''}
+                                    rules={{
+                                        required: rules.required,
+                                        ...rules.minLength(1),
+                                        ...rules.maxLength(1000),
+                                    }}
+                                    render={({
+                                        field,
+                                        fieldState: { error },
+                                    }) => (
+                                        <TextField
+                                            {...field}
+                                            required
+                                            fullWidth
+                                            multiline
+                                            maxRows={20}
+                                            minRows={10}
+                                            variant="outlined"
+                                            onChange={field.onChange}
+                                            label={t(
+                                                'reviews.create.review.label'
+                                            )}
+                                            placeholder={t(
+                                                'reviews.create.review.placeHolder'
+                                            )}
+                                            disabled={isLoading}
+                                            error={!!error}
+                                            helperText={error?.message}
+                                            margin="normal"
+                                        />
+                                    )}
+                                />
+                            </Box>
+                            {isError && (
+                                <Box px={2}>
+                                    <Alert severity="error">
+                                        {t('error.default')}
+                                    </Alert>
                                 </Box>
-                            </form>
-                        )}
-                    </Box>
-                </Paper>
-            </Box>
-        </>
-    );
+                            )}
+                            <Box p={2} textAlign="end">
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={isLoading}
+                                    type="submit"
+                                >
+                                    {isLoading ? (
+                                        <CircularProgress color="inherit" />
+                                    ) : (
+                                        t('reviews.create.review.button')
+                                    )}
+                                </Button>
+                            </Box>
+                        </form>
+                    )}
+                </Box>
+            </Paper>
+        </Box>
+    </>;
 };
 
 export default ReviewForm;

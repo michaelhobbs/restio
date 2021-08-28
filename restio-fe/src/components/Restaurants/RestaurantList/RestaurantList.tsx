@@ -9,7 +9,7 @@ import {
     useTheme,
 } from '@material-ui/core';
 import { FilterList } from '@material-ui/icons';
-import { Pagination, Rating, ToggleButton } from '@material-ui/lab';
+import { Pagination, Rating, ToggleButton } from '@material-ui/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
@@ -38,7 +38,7 @@ export const RestaurantList = (): JSX.Element => {
         _page: debouncedPage,
     });
     const theme = useTheme();
-    const isXs = useMediaQuery(theme.breakpoints.down('xs'));
+    const isXs = useMediaQuery(theme.breakpoints.down('sm'));
     const { user: { role } = {} } = useAuth();
 
     const toggleFilter = () => {

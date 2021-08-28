@@ -7,7 +7,7 @@ import {
     DialogContentText,
     DialogTitle,
 } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@material-ui/core';
 import { RequestStatusFlags } from '@reduxjs/toolkit/dist/query/core/apiState';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -36,45 +36,43 @@ export function DeleteConfirmationDialog<T extends Record<string, unknown>>({
             handleClose(true);
         }
     }, [isSuccess, handleClose, closeOnSuccess]);
-    return (
-        <>
-            <DialogTitle id="alert-dialog-title">
-                {t('common.delete.title')}
-            </DialogTitle>
-            <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    {t('common.delete.message')}
-                </DialogContentText>
-                {isError && (
-                    <Box mt={1}>
-                        <Alert severity="error">
-                            {t('error.deletingFailed')}
-                        </Alert>
-                    </Box>
+    return <>
+        <DialogTitle id="alert-dialog-title">
+            {t('common.delete.title')}
+        </DialogTitle>
+        <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+                {t('common.delete.message')}
+            </DialogContentText>
+            {isError && (
+                <Box mt={1}>
+                    <Alert severity="error">
+                        {t('error.deletingFailed')}
+                    </Alert>
+                </Box>
+            )}
+        </DialogContent>
+        <DialogActions>
+            <Button onClick={() => handleClose()}>
+                {t('common.cancel')}
+            </Button>
+            <Button
+                onClick={() => {
+                    apiCall(dialogData);
+                }}
+                color="primary"
+                variant="contained"
+                autoFocus
+                disabled={isLoading}
+            >
+                {isLoading ? (
+                    <CircularProgress size={20} />
+                ) : (
+                    <>{t('common.delete.button')}</>
                 )}
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={() => handleClose()} color="default">
-                    {t('common.cancel')}
-                </Button>
-                <Button
-                    onClick={() => {
-                        apiCall(dialogData);
-                    }}
-                    color="primary"
-                    variant="contained"
-                    autoFocus
-                    disabled={isLoading}
-                >
-                    {isLoading ? (
-                        <CircularProgress size={20} />
-                    ) : (
-                        <>{t('common.delete.button')}</>
-                    )}
-                </Button>
-            </DialogActions>
-        </>
-    );
+            </Button>
+        </DialogActions>
+    </>;
 }
 
 export default DeleteConfirmationDialog;

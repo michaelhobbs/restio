@@ -6,7 +6,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import { ArrowBackIos } from '@material-ui/icons';
-import { Pagination } from '@material-ui/lab';
+import { Pagination } from '@material-ui/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useLocation, useParams } from 'react-router-dom';
@@ -59,84 +59,82 @@ export const RestaurantDetail = (): JSX.Element => {
     const restaurantName = restaurant?.name;
     const restaurantAvgRating = restaurant?.avg_rating;
     const hasLoadedTitle = !!restaurantName;
-    return (
-        <>
-            <Box mb={2} display="flex" alignItems="flex-start">
-                <IconButton
-                    aria-label={t('common.back')}
-                    component={RouterLink}
-                    to={ROUTES.home}
-                >
-                    <ArrowBackIos />
-                </IconButton>
-                <Box>
-                    <Typography variant="h4" gutterBottom>
-                        {restaurantName}
-                    </Typography>
-                    {hasLoadedTitle && (
-                        <>
-                            {restaurantAvgRating ? (
-                                <RestaurantRating
-                                    rating={restaurantAvgRating}
-                                />
-                            ) : (
-                                <Typography>
-                                    {t('restaurants.noReviews')}
-                                </Typography>
-                            )}
-                        </>
-                    )}
-                    {role === UserRoles.User && restaurant && (
-                        <Box mt={1}>
-                            <Button
-                                variant="outlined"
-                                fullWidth
-                                component={RouterLink}
-                                to={getToReviewCreate(Number(id), restaurant)}
-                            >
-                                {t('restaurants.writeReview')}
-                            </Button>
-                        </Box>
-                    )}
-                </Box>
+    return <>
+        <Box mb={2} display="flex" alignItems="flex-start">
+            <IconButton
+                aria-label={t('common.back')}
+                component={RouterLink}
+                to={ROUTES.home}
+                size="large">
+                <ArrowBackIos />
+            </IconButton>
+            <Box>
+                <Typography variant="h4" gutterBottom>
+                    {restaurantName}
+                </Typography>
+                {hasLoadedTitle && (
+                    <>
+                        {restaurantAvgRating ? (
+                            <RestaurantRating
+                                rating={restaurantAvgRating}
+                            />
+                        ) : (
+                            <Typography>
+                                {t('restaurants.noReviews')}
+                            </Typography>
+                        )}
+                    </>
+                )}
+                {role === UserRoles.User && restaurant && (
+                    <Box mt={1}>
+                        <Button
+                            variant="outlined"
+                            fullWidth
+                            component={RouterLink}
+                            to={getToReviewCreate(Number(id), restaurant)}
+                        >
+                            {t('restaurants.writeReview')}
+                        </Button>
+                    </Box>
+                )}
             </Box>
+        </Box>
 
-            {isLoading && <CircularProgress />}
+        {isLoading && <CircularProgress />}
 
-            {isSuccess && restaurant && (
-                <Box>
-                    <ReviewHighlights
-                        highestReview={highestReview}
-                        lowestReview={lowestReview}
-                    />
-                    {reviews && <ReviewList reviews={reviews} />}
+        {isSuccess && restaurant && (
+            <Box>
+                <ReviewHighlights
+                    highestReview={highestReview}
+                    lowestReview={lowestReview}
+                />
+                {reviews && <ReviewList reviews={reviews} />}
 
-                    {pagination && (
-                        <Box mt={4} mb={10}>
-                            <Box justifyContent="center" display="flex">
-                                <Pagination
-                                    count={Math.ceil(
-                                        pagination.total_count / PER_PAGE
-                                    )}
-                                    page={page}
-                                    onChange={(_, page) => setPage(page)}
-                                />
-                            </Box>
-                            {isReviewsFetching && (
-                                <Box
-                                    my={1}
-                                    justifyContent="center"
-                                    display="flex"
-                                >
-                                    <CircularProgress size={20} />
-                                </Box>
-                            )}
+                {pagination && (
+                    <Box mt={4} mb={10}>
+                        <Box justifyContent="center" display="flex">
+                            <Pagination
+                                count={Math.ceil(
+                                    pagination.total_count / PER_PAGE
+                                )}
+                                page={page}
+                                onChange={(_, page) => setPage(page)}
+                            />
                         </Box>
-                    )}
-                </Box>
-            )}
-        </>
-    );
+                        {isReviewsFetching && (
+                            <Box
+                                my={1}
+                                justifyContent="center"
+                                display="flex"
+                            >
+                                <CircularProgress size={20} />
+                            </Box>
+                        )}
+                    </Box>
+                )}
+            </Box>
+        )}
+    </>;
 };
 
 export default RestaurantDetail;

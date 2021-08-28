@@ -19,7 +19,7 @@ export const PageTitle = (props: Props): JSX.Element => {
     return (
         <Box mb={2} display="flex" alignItems="flex-start">
             {goBack && (
-                <IconButton aria-label={t('common.back')} onClick={goBack}>
+                <IconButton aria-label={t('common.back')} onClick={goBack} size="large">
                     <ArrowBackIos />
                 </IconButton>
             )}

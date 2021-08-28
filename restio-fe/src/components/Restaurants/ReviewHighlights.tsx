@@ -1,11 +1,5 @@
-import {
-    Box,
-    Divider,
-    Grid,
-    makeStyles,
-    Paper,
-    Typography,
-} from '@material-ui/core';
+import { Box, Divider, Grid, Paper, Typography } from '@material-ui/core';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { useTranslation } from 'react-i18next';
 import { Review } from '../../rtk-query/api';
 import RestaurantReview from './RestaurantReview';

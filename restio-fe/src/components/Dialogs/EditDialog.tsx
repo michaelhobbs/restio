@@ -1,5 +1,5 @@
 import { Box, DialogContent, DialogTitle } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@material-ui/core';
 import { UseMutation } from '@reduxjs/toolkit/dist/query/react/buildHooks';
 import { FC, Fragment, useEffect } from 'react';
 import {

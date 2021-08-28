@@ -1,13 +1,6 @@
-import {
-    AppBar,
-    Container,
-    createStyles,
-    IconButton,
-    makeStyles,
-    Theme,
-    Toolbar,
-    Typography,
-} from '@material-ui/core';
+import { AppBar, Container, IconButton, Theme, Toolbar, Typography } from '@material-ui/core';
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { Restaurant as RestaurantIcon } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
@@ -42,7 +35,7 @@ function Header(): JSX.Element {
                             component={RouterLink}
                             to="/"
                             className={classes.menuButton}
-                        >
+                            size="large">
                             <RestaurantIcon />
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>

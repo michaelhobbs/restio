@@ -1,16 +1,10 @@
-import {
-    Avatar,
-    Box,
-    createStyles,
-    makeStyles,
-    Theme,
-    Tooltip,
-    Typography,
-} from '@material-ui/core';
-import grey from '@material-ui/core/colors/grey';
+import { Avatar, Box, Theme, Tooltip, Typography } from '@material-ui/core';
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { Reply } from '@material-ui/icons';
 import { Review } from '../../rtk-query/api';
 import RestaurantRating from './RestaurantRating';
+import { grey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

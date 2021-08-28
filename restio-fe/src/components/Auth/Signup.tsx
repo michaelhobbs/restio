@@ -1,16 +1,7 @@
-import {
-    Avatar,
-    Box,
-    Button,
-    CircularProgress,
-    Container,
-    Grid,
-    Link,
-    makeStyles,
-    Typography,
-} from '@material-ui/core';
+import { Avatar, Box, Button, CircularProgress, Container, Grid, Link, Typography } from '@material-ui/core';
+import makeStyles from '@material-ui/styles/makeStyles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@material-ui/core';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useHistory, useLocation } from 'react-router-dom';

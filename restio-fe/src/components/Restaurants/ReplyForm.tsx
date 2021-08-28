@@ -1,19 +1,12 @@
-import {
-    Avatar,
-    Box,
-    Button,
-    CircularProgress,
-    createStyles,
-    makeStyles,
-    Theme,
-    Tooltip,
-} from '@material-ui/core';
+import { Avatar, Box, Button, CircularProgress, Theme, Tooltip } from '@material-ui/core';
+import createStyles from '@material-ui/styles/createStyles';
+import makeStyles from '@material-ui/styles/makeStyles';
 import {
     ArrowDropDown,
     ArrowDropUp,
     Reply as ReplyIcon,
 } from '@material-ui/icons';
-import { Alert } from '@material-ui/lab';
+import { Alert } from '@material-ui/core';
 import { useState } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';

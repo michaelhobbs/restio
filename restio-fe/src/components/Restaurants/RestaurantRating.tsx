@@ -1,5 +1,5 @@
 import { Box, Typography } from '@material-ui/core';
-import { Rating } from '@material-ui/lab';
+import { Rating } from '@material-ui/core';
 
 type RatingProps = {
     rating: number;
