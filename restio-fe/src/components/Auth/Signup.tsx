@@ -168,7 +168,7 @@ export default function SignUp(): JSX.Element {
                                     component={RouterLink}
                                     to={getToLogin(from)}
                                     variant="body2"
-                                >
+                                    underline="hover">
                                     {t('auth.login.prompt')}
                                 </Link>
                             </Grid>
