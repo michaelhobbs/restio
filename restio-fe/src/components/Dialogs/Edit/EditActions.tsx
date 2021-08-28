@@ -9,9 +9,7 @@ export const EditActions = ({ handleClose, isLoading }: Props): JSX.Element => {
     const { t } = useTranslation();
     return (
         <DialogActions>
-            <Button onClick={() => handleClose()}>
-                {t('common.cancel')}
-            </Button>
+            <Button onClick={() => handleClose()}>{t('common.cancel')}</Button>
             <Button type="submit" color="primary" variant="contained">
                 {isLoading ? (
                     <CircularProgress size={20} />

@@ -1,4 +1,13 @@
-import { Avatar, Box, Button, CircularProgress, Container, Grid, Link, Typography } from '@material-ui/core';
+import {
+    Avatar,
+    Box,
+    Button,
+    CircularProgress,
+    Container,
+    Grid,
+    Link,
+    Typography,
+} from '@material-ui/core';
 import makeStyles from '@material-ui/styles/makeStyles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { Alert } from '@material-ui/core';
@@ -168,7 +177,8 @@ export default function SignUp(): JSX.Element {
                                     component={RouterLink}
                                     to={getToLogin(from)}
                                     variant="body2"
-                                    underline="hover">
+                                    underline="hover"
+                                >
                                     {t('auth.login.prompt')}
                                 </Link>
                             </Grid>

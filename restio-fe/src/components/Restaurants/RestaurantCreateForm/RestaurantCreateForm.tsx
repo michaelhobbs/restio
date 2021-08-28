@@ -41,90 +41,93 @@ export const RestaurantCreateForm: FC = () => {
             .then(() => reset({ name: '' }));
         setAddAnother(false);
     };
-    return <>
-        <Box mb={2} display="flex" alignItems="flex-start">
-            <IconButton
-                aria-label={t('common.back')}
-                component={RouterLink}
-                to={ROUTES.home}
-                size="large">
-                <ArrowBackIos />
-            </IconButton>
-            <Box>
-                <Typography variant="h4" gutterBottom>
-                    {t('restaurants.create.title')}
-                </Typography>
+    return (
+        <>
+            <Box mb={2} display="flex" alignItems="flex-start">
+                <IconButton
+                    aria-label={t('common.back')}
+                    component={RouterLink}
+                    to={ROUTES.home}
+                    size="large"
+                >
+                    <ArrowBackIos />
+                </IconButton>
+                <Box>
+                    <Typography variant="h4" gutterBottom>
+                        {t('restaurants.create.title')}
+                    </Typography>
+                </Box>
             </Box>
-        </Box>
-        <Box mt={1} width={1}>
-            <Paper>
-                <Box p={1}>
-                    {isSuccess && (
-                        <>
-                            {!addAnother && (
-                                <>
-                                    <Box px={2}>
-                                        <Alert severity="success">
-                                            {t(
-                                                'restaurants.create.success'
-                                            )}
-                                        </Alert>
-                                    </Box>
+            <Box mt={1} width={1}>
+                <Paper>
+                    <Box p={1}>
+                        {isSuccess && (
+                            <>
+                                {!addAnother && (
+                                    <>
+                                        <Box px={2}>
+                                            <Alert severity="success">
+                                                {t(
+                                                    'restaurants.create.success'
+                                                )}
+                                            </Alert>
+                                        </Box>
+                                        <Box p={2}>
+                                            <Button
+                                                onClick={() => {
+                                                    setAddAnother(!addAnother);
+                                                }}
+                                            >
+                                                {t(
+                                                    'restaurants.create.addAnother'
+                                                )}
+                                            </Button>
+                                        </Box>
+                                    </>
+                                )}
+                            </>
+                        )}
+                        {(!isSuccess || addAnother) && (
+                            <FormProvider<RestaurantNew> {...methods}>
+                                <form
+                                    onSubmit={handleSubmit(onSubmit)}
+                                    noValidate
+                                >
                                     <Box p={2}>
+                                        <RestaurantName disabled={isLoading} />
+                                    </Box>
+                                    {isError && (
+                                        <Box px={2}>
+                                            <Alert severity="error">
+                                                {t('error.savingFailed')}
+                                            </Alert>
+                                        </Box>
+                                    )}
+                                    <Box p={2} textAlign="end">
                                         <Button
-                                            onClick={() => {
-                                                setAddAnother(!addAnother);
-                                            }}
+                                            variant="contained"
+                                            color="primary"
+                                            disabled={isLoading}
+                                            type="submit"
                                         >
-                                            {t(
-                                                'restaurants.create.addAnother'
+                                            {isLoading ? (
+                                                <CircularProgress
+                                                    color="inherit"
+                                                    size={20}
+                                                />
+                                            ) : (
+                                                t('restaurants.create.button')
                                             )}
                                         </Button>
                                     </Box>
-                                </>
-                            )}
-                        </>
-                    )}
-                    {(!isSuccess || addAnother) && (
-                        <FormProvider<RestaurantNew> {...methods}>
-                            <form
-                                onSubmit={handleSubmit(onSubmit)}
-                                noValidate
-                            >
-                                <Box p={2}>
-                                    <RestaurantName disabled={isLoading} />
-                                </Box>
-                                {isError && (
-                                    <Box px={2}>
-                                        <Alert severity="error">
-                                            {t('error.savingFailed')}
-                                        </Alert>
-                                    </Box>
-                                )}
-                                <Box p={2} textAlign="end">
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        disabled={isLoading}
-                                        type="submit"
-                                    >
-                                        {isLoading ? (
-                                            <CircularProgress
-                                                color="inherit"
-                                                size={20}
-                                            />
-                                        ) : (
-                                            t('restaurants.create.button')
-                                        )}
-                                    </Button>
-                                </Box>
-                            </form>
-                        </FormProvider>
-                    )}
-                </Box>
-            </Paper>
-        </Box>
-    </>;
+                                </form>
+                            </FormProvider>
+                        )}
+                    </Box>
+                </Paper>
+            </Box>
+        </>
+    );
 };
 
 export default RestaurantCreateForm;

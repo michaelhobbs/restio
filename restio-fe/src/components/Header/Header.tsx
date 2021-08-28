@@ -1,4 +1,11 @@
-import { AppBar, Container, IconButton, Theme, Toolbar, Typography } from '@material-ui/core';
+import {
+    AppBar,
+    Container,
+    IconButton,
+    Theme,
+    Toolbar,
+    Typography,
+} from '@material-ui/core';
 import createStyles from '@material-ui/styles/createStyles';
 import makeStyles from '@material-ui/styles/makeStyles';
 import { Restaurant as RestaurantIcon } from '@material-ui/icons';
@@ -35,7 +42,8 @@ function Header(): JSX.Element {
                             component={RouterLink}
                             to="/"
                             className={classes.menuButton}
-                            size="large">
+                            size="large"
+                        >
                             <RestaurantIcon />
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>

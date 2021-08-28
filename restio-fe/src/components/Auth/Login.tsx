@@ -1,4 +1,5 @@
 import {
+    Alert,
     Avatar,
     Box,
     Button,
@@ -9,9 +10,8 @@ import {
     TextField,
     Typography,
 } from '@material-ui/core';
-import makeStyles from '@material-ui/styles/makeStyles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { Alert } from '@material-ui/core';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useHistory, useLocation } from 'react-router-dom';
@@ -159,7 +159,8 @@ export default function Login(): JSX.Element {
                                 component={RouterLink}
                                 to={getToSignup(from)}
                                 variant="body2"
-                                underline="hover">
+                                underline="hover"
+                            >
                                 {t('auth.signup.prompt')}
                             </Link>
                         </Grid>

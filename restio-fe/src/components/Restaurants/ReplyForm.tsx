@@ -1,4 +1,11 @@
-import { Avatar, Box, Button, CircularProgress, Theme, Tooltip } from '@material-ui/core';
+import {
+    Avatar,
+    Box,
+    Button,
+    CircularProgress,
+    Theme,
+    Tooltip,
+} from '@material-ui/core';
 import createStyles from '@material-ui/styles/createStyles';
 import makeStyles from '@material-ui/styles/makeStyles';
 import {
