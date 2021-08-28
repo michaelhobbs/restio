@@ -106,7 +106,8 @@
             "title": "Delete?",
             "message": "Deletion is immediate and permanent.",
             "button": "Delete"
-        }
+        },
+        "no.results": "No Results ..."
     },
     "error": {
         "validation": {

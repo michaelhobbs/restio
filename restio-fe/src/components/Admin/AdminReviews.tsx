@@ -63,7 +63,7 @@ const AdminReviews: FC = () => {
             editHook={useUpdateReviewMutation}
             columns={columns}
             apiToTableData={(data: GetReviewsApiResponse) => data.reviews}
-            title={`${t('admin.reviews.title')} Auto  `}
+            title={`${t('admin.reviews.title')}  `}
             inputFields={[ReviewComment, ReviewRating, ReviewDate, ReviewReply]}
             getEditPayload={getEditPayload}
         />

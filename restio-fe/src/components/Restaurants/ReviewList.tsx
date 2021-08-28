@@ -38,6 +38,13 @@ export const ReviewList = ({
                             {arr.length - 1 !== idx && <Divider />}
                         </Fragment>
                     ))}
+                    {reviews.length === 0 && (
+                        <Box justifyContent="center" display="flex">
+                            <Typography variant="body1" gutterBottom>
+                                {t('common.no.results')}
+                            </Typography>
+                        </Box>
+                    )}
                 </Box>
             </Paper>
         </Box>

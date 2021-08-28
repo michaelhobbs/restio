@@ -3,13 +3,15 @@ import {
     Button,
     CircularProgress,
     Grid,
+    Pagination,
+    Rating,
+    ToggleButton,
     Tooltip,
     Typography,
     useMediaQuery,
     useTheme,
 } from '@material-ui/core';
 import { FilterList } from '@material-ui/icons';
-import { Pagination, Rating, ToggleButton } from '@material-ui/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
@@ -112,6 +114,13 @@ export const RestaurantList = (): JSX.Element => {
                         />
                     ))}
                 </Grid>
+            )}
+            {restaurants?.length === 0 && (
+                <Box justifyContent="center" display="flex" m={4}>
+                    <Typography variant="body1" gutterBottom>
+                        {t('common.no.results')}
+                    </Typography>
+                </Box>
             )}
 
             {pagination && pagination.total_count > PER_PAGE && (

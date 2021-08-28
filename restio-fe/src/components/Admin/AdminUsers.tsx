@@ -54,7 +54,7 @@ const AdminUsers = (): JSX.Element => {
             editHook={useUpdateUserMutation}
             columns={columns}
             apiToTableData={(data: GetUsersApiResponse) => data.users}
-            title={`${t('admin.users.title')} Auto  `}
+            title={`${t('admin.users.title')}  `}
             inputFields={[UserName, UserEmail, UserRole]}
             getEditPayload={getEditPayload}
         />

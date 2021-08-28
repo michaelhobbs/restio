@@ -1,4 +1,5 @@
 import {
+    Alert,
     Box,
     CircularProgress,
     Dialog,
@@ -8,7 +9,6 @@ import {
     Typography,
 } from '@material-ui/core';
 import { Delete, Edit } from '@material-ui/icons';
-import { Alert } from '@material-ui/core';
 import { QueryDefinition } from '@reduxjs/toolkit/dist/query';
 import { RequestStatusFlags } from '@reduxjs/toolkit/dist/query/core/apiState';
 import {
@@ -168,6 +168,13 @@ function AdminSection<T extends User | Review | Restaurant>({
                             pageCount={data?.pagination?.total_count ?? 0}
                         />
                     </TableContainer>
+                )}
+                {!isFetching && (!tableData || tableData?.length === 0) && (
+                    <Box justifyContent="center" display="flex" m={4}>
+                        <Typography variant="body1" gutterBottom>
+                            {t('common.no.results')}
+                        </Typography>
+                    </Box>
                 )}
                 {isError && (
                     <Alert severity="error">{t('error.default')}</Alert>

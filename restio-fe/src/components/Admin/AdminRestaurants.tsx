@@ -52,7 +52,7 @@ const AdminRestaurants: FC = () => {
             apiToTableData={(data: GetRestaurantsApiResponse) =>
                 data.restaurants
             }
-            title={`${t('admin.restaurants.title')} Auto  `}
+            title={`${t('admin.restaurants.title')}  `}
             inputFields={[RestaurantName, RestaurantOwnerId]}
             getEditPayload={getEditPayload}
         />
