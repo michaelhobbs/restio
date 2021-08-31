@@ -1,4 +1,5 @@
 import {
+    Alert,
     Avatar,
     Box,
     Button,
@@ -8,9 +9,8 @@ import {
     Link,
     Typography,
 } from '@material-ui/core';
-import makeStyles from '@material-ui/styles/makeStyles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { Alert } from '@material-ui/core';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink, useHistory, useLocation } from 'react-router-dom';
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
     avatar: {
         margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
+        backgroundColor: theme.palette.error.main,
     },
     form: {
         width: '100%', // Fix IE 11 issue.

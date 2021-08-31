@@ -20,6 +20,7 @@ import {
     TableState,
     useAsyncDebounce,
     useFilters,
+    useFlexLayout,
     usePagination,
     useSortBy,
     useTable,
@@ -88,6 +89,7 @@ function Table<T extends Record<string, unknown>>(
             manualSortBy: true,
         },
         useFilters,
+        useFlexLayout,
         useSortBy,
         usePagination
     );
