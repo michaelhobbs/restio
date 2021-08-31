@@ -98,6 +98,35 @@ server.use((req, res, next) => {
     }
 });
 
+// parse serialized filter query param and expand to json-server x_like params
+server.use((req, res, next) => {
+    const filterString = req.query.filter;
+    console.log('filter: ', filterString);
+    if (filterString && typeof filterString === 'string') {
+        const filterObject = JSON.parse(filterString);
+        console.log('filterObject: ', filterObject);
+        Object.entries(filterObject).forEach(([key, value]) => {
+            req.query[`${key}_like`] = value;
+        });
+    }
+    next();
+});
+
+// parse serialized sort query param and expand to json-server x_like params
+server.use((req, res, next) => {
+    const sortString = req.query.sort;
+    console.log('sort: ', sortString);
+    if (sortString && typeof sortString === 'string') {
+        const desc = sortString.startsWith('-');
+        const field = sortString.substr(desc ? 1 : 0);
+        console.log('sort field: ', field);
+        console.log('order desc: ', desc);
+        req.query._sort = field;
+        req.query._order = desc ? 'desc' : 'asc';
+    }
+    next();
+});
+
 // generic error echo, if string 'error' present in request body
 server.use((req, res, next) => {
     if (JSON.stringify(req.body).indexOf('error') >= 0) {

@@ -76,6 +76,18 @@ paths:
             parameters:
                 - $ref: '#/components/parameters/pageParam'
                 - $ref: '#/components/parameters/limitParam'
+                - in: query
+                  name: filter
+                  content:
+                      application/json: # <---- media type indicates how to serialize / deserialize the parameter content
+                          schema:
+                              $ref: '#/components/schemas/User'
+                - in: query
+                  name: sort
+                  description: Field on which to sort, prefixed with '-' to indicate descending order
+                  example: -id
+                  schema:
+                      type: string
             responses:
                 '200':
                     description: The list of Users and pagination properties.
@@ -244,6 +256,18 @@ paths:
                   description: Filter applied to average rating of restaurants. Only restaurants with an average rating >= to minRating are returned.
                 - $ref: '#/components/parameters/pageParam'
                 - $ref: '#/components/parameters/limitParam'
+                - in: query
+                  name: filter
+                  content:
+                      application/json: # <---- media type indicates how to serialize / deserialize the parameter content
+                          schema:
+                              $ref: '#/components/schemas/Restaurant'
+                - in: query
+                  name: sort
+                  description: Field on which to sort, prefixed with '-' to indicate descending order
+                  example: -id
+                  schema:
+                      type: string
             responses:
                 '200':
                     description: The list of restaurants and pagination properties.
@@ -508,6 +532,18 @@ paths:
             parameters:
                 - $ref: '#/components/parameters/pageParam'
                 - $ref: '#/components/parameters/limitParam'
+                - in: query
+                  name: filter
+                  content:
+                      application/json: # <---- media type indicates how to serialize / deserialize the parameter content
+                          schema:
+                              $ref: '#/components/schemas/Review'
+                - in: query
+                  name: sort
+                  description: Field on which to sort, prefixed with '-' to indicate descending order
+                  example: -id
+                  schema:
+                      type: string
             responses:
                 '200':
                     description: The list of Reviews and pagination properties.

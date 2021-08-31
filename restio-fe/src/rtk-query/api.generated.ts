@@ -24,7 +24,12 @@ export const api = createApi({
         getUsers: build.query<GetUsersApiResponse, GetUsersApiArg>({
             query: (queryArg) => ({
                 url: `/users`,
-                params: { _page: queryArg._page, _limit: queryArg._limit },
+                params: {
+                    _page: queryArg._page,
+                    _limit: queryArg._limit,
+                    filter: queryArg.filter,
+                    sort: queryArg.sort,
+                },
             }),
         }),
         postUser: build.mutation<PostUserApiResponse, PostUserApiArg>({
@@ -67,6 +72,8 @@ export const api = createApi({
                     minRating: queryArg.minRating,
                     _page: queryArg._page,
                     _limit: queryArg._limit,
+                    filter: queryArg.filter,
+                    sort: queryArg.sort,
                 },
             }),
         }),
@@ -135,7 +142,12 @@ export const api = createApi({
         getReviews: build.query<GetReviewsApiResponse, GetReviewsApiArg>({
             query: (queryArg) => ({
                 url: `/reviews`,
-                params: { _page: queryArg._page, _limit: queryArg._limit },
+                params: {
+                    _page: queryArg._page,
+                    _limit: queryArg._limit,
+                    filter: queryArg.filter,
+                    sort: queryArg.sort,
+                },
             }),
         }),
         updateReview: build.mutation<
@@ -188,6 +200,9 @@ export type GetUsersApiArg = {
     _page?: number;
     /** The number of records to return in paginated response. */
     _limit?: number;
+    filter?: any;
+    /** Field on which to sort, prefixed with '-' to indicate descending order */
+    sort?: string;
 };
 export type PostUserApiResponse = /** status 201 Created */ UserAuth;
 export type PostUserApiArg = {
@@ -226,6 +241,9 @@ export type GetRestaurantsApiArg = {
     _page?: number;
     /** The number of records to return in paginated response. */
     _limit?: number;
+    filter?: any;
+    /** Field on which to sort, prefixed with '-' to indicate descending order */
+    sort?: string;
 };
 export type PostRestaurantApiResponse = /** status 201 Created */ undefined;
 export type PostRestaurantApiArg = {
@@ -297,6 +315,9 @@ export type GetReviewsApiArg = {
     _page?: number;
     /** The number of records to return in paginated response. */
     _limit?: number;
+    filter?: any;
+    /** Field on which to sort, prefixed with '-' to indicate descending order */
+    sort?: string;
 };
 export type UpdateReviewApiResponse = /** status 200 Updated */ undefined;
 export type UpdateReviewApiArg = {

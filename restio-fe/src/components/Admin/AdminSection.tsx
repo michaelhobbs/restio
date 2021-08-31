@@ -22,6 +22,7 @@ import { CellProps, Column } from 'react-table';
 import {
     GetRestaurantsApiResponse,
     GetReviewsApiResponse,
+    GetUsersApiArg,
     GetUsersApiResponse,
     Restaurant,
     Review,
@@ -79,7 +80,7 @@ function AdminSection<T extends User | Review | Restaurant>({
     getEditPayload,
 }: AdminSectionProps<T>): JSX.Element {
     const { t } = useTranslation();
-    const [queryParams, setQueryParams] = useState({
+    const [queryParams, setQueryParams] = useState<GetUsersApiArg>({
         _page: 1,
         _limit: 10,
     });
@@ -147,8 +148,27 @@ function AdminSection<T extends User | Review | Restaurant>({
         ];
     }, [columns]);
 
-    const fetchData: FetchData<T> = ({ pageIndex, pageSize }) => {
-        setQueryParams({ _page: pageIndex + 1, _limit: pageSize });
+    const fetchData: FetchData<T> = ({
+        pageIndex,
+        pageSize,
+        sortBy,
+        filters,
+    }) => {
+        const apiFilters = filters.reduce(
+            (acc, f) => ({
+                ...acc,
+                [`${f.id}`]: f.value as string,
+            }),
+            {}
+        );
+        const sort = sortBy?.[0];
+        const apiSort = sort ? `${sort.desc ? '-' : ''}${sort.id}` : undefined;
+        setQueryParams({
+            _page: pageIndex + 1,
+            _limit: pageSize,
+            filter: JSON.stringify(apiFilters),
+            sort: apiSort,
+        });
     };
 
     return (

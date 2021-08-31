@@ -11,17 +11,25 @@ import {
     TableRow,
 } from '@material-ui/core';
 import TablePaginationActions from '@material-ui/core/TablePagination/TablePaginationActions';
-import { PropsWithChildren, useEffect } from 'react';
+import { ArrowDownward, ArrowUpward, SyncAlt } from '@material-ui/icons';
+import { PropsWithChildren, useCallback, useEffect, useMemo } from 'react';
 import {
     Column,
+    FilterProps,
+    Renderer,
     TableState,
     useAsyncDebounce,
+    useFilters,
     usePagination,
+    useSortBy,
     useTable,
 } from 'react-table';
 
 export type FetchData<T extends Record<string, unknown>> = (
-    tableState: Pick<TableState<T>, 'pageSize' | 'pageIndex'>
+    tableState: Pick<
+        TableState<T>,
+        'pageSize' | 'pageIndex' | 'sortBy' | 'filters'
+    >
 ) => void;
 
 type TableProps<T extends Record<string, unknown>> = {
@@ -35,6 +43,30 @@ type TableProps<T extends Record<string, unknown>> = {
 function Table<T extends Record<string, unknown>>(
     props: PropsWithChildren<TableProps<T>>
 ): JSX.Element {
+    // Define a default UI for filtering
+    const DefaultColumnFilter = useCallback(function DefaultColumnFilter({
+        column: { filterValue, setFilter },
+    }: FilterProps<T>): Renderer<FilterProps<T>> {
+        return (
+            <input
+                value={(filterValue as string) || ''}
+                onChange={(e) => {
+                    setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
+                }}
+                onClick={(e) => e.stopPropagation()}
+                placeholder={`Search...`}
+            />
+        );
+    },
+    []);
+    const defaultColumn: Pick<Column<T>, 'Filter'> = useMemo(
+        () => ({
+            // Let's set up our default Filter UI
+            Filter: DefaultColumnFilter,
+        }),
+        [DefaultColumnFilter]
+    );
+
     const { data, name, columns, onFetchData, pageCount } = props;
 
     const {
@@ -44,14 +76,19 @@ function Table<T extends Record<string, unknown>>(
         prepareRow,
         gotoPage,
         setPageSize,
-        state: { pageIndex, pageSize },
+        state: { pageIndex, pageSize, sortBy, filters },
     } = useTable(
         {
             columns,
             data,
+            defaultColumn,
             pageCount: pageCount,
+            manualFilters: true,
             manualPagination: true,
+            manualSortBy: true,
         },
+        useFilters,
+        useSortBy,
         usePagination
     );
 
@@ -74,9 +111,9 @@ function Table<T extends Record<string, unknown>>(
     // When the these table states changes, fetch new data!
     useEffect(() => {
         // Every change will call our debounced function
-        onFetchDataDebounced({ pageIndex, pageSize });
+        onFetchDataDebounced({ pageIndex, pageSize, sortBy, filters });
         // Only the last call after the 100ms debounce is over will be fired!
-    }, [onFetchDataDebounced, pageIndex, pageSize]);
+    }, [onFetchDataDebounced, pageIndex, pageSize, sortBy, filters]);
 
     return (
         <MuiTable
@@ -88,8 +125,35 @@ function Table<T extends Record<string, unknown>>(
                 {headerGroups.map((headerGroup) => (
                     <TableRow {...headerGroup.getHeaderGroupProps()}>
                         {headerGroup.headers.map((column) => (
-                            <TableCell {...column.getHeaderProps()}>
+                            <TableCell
+                                {...column.getHeaderProps(
+                                    column.getSortByToggleProps()
+                                )}
+                            >
                                 {column.render('Header')}
+                                <span>
+                                    {column.isSorted ? (
+                                        column.isSortedDesc ? (
+                                            <ArrowDownward fontSize="inherit" />
+                                        ) : (
+                                            <ArrowUpward fontSize="inherit" />
+                                        )
+                                    ) : column.canSort ? (
+                                        <SyncAlt
+                                            fontSize="inherit"
+                                            color="disabled"
+                                            sx={{ transform: 'rotate(90deg)' }}
+                                        />
+                                    ) : (
+                                        ''
+                                    )}
+                                </span>
+
+                                <div>
+                                    {column.canFilter
+                                        ? column.render('Filter')
+                                        : null}
+                                </div>
                             </TableCell>
                         ))}
                     </TableRow>
