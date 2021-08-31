@@ -164,6 +164,7 @@ export default function SignUp(): JSX.Element {
                             color="primary"
                             className={classes.submit}
                             disabled={isLoading}
+                            size="large"
                         >
                             {isLoading ? (
                                 <CircularProgress color="inherit" />

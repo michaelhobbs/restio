@@ -6,9 +6,9 @@ import {
     Toolbar,
     Typography,
 } from '@material-ui/core';
+import { Restaurant as RestaurantIcon } from '@material-ui/icons';
 import createStyles from '@material-ui/styles/createStyles';
 import makeStyles from '@material-ui/styles/makeStyles';
-import { Restaurant as RestaurantIcon } from '@material-ui/icons';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import Logout from '../Auth/Logout';
@@ -33,7 +33,7 @@ function Header(): JSX.Element {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <AppBar position="static">
+            <AppBar position="static" color="default">
                 <Container maxWidth="lg">
                     <Toolbar disableGutters>
                         <IconButton

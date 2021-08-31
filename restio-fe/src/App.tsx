@@ -1,9 +1,11 @@
+import { useMediaQuery } from '@material-ui/core';
 import {
     createTheme,
-    ThemeProvider,
-    Theme,
     StyledEngineProvider,
+    Theme,
+    ThemeProvider,
 } from '@material-ui/core/styles';
+import { useMemo } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import AppSuspense from './components/AppSuspense';
 import Login from './components/Auth/Login';
@@ -18,9 +20,24 @@ declare module '@material-ui/styles/defaultTheme' {
     interface DefaultTheme extends Theme {}
 }
 
-const theme = createTheme();
-
 function App(): JSX.Element {
+    const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+    const theme = useMemo(
+        () =>
+            createTheme({
+                palette: {
+                    mode: prefersDarkMode ? 'dark' : 'light',
+                    primary: {
+                        main: '#333',
+                    },
+                    secondary: {
+                        main: '#ccc',
+                    },
+                },
+            }),
+        [prefersDarkMode]
+    );
     return (
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
