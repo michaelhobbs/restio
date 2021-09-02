@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import AppSuspense from './components/AppSuspense';
 // import i18n (to bundle text resources)
 import './i18n/i18n';
 import './index.css';
@@ -17,7 +18,9 @@ ReactDOM.render(
     <StrictMode>
         <Provider store={store}>
             <BrowserRouter>
-                <App />
+                <AppSuspense>
+                    <App />
+                </AppSuspense>
             </BrowserRouter>
         </Provider>
     </StrictMode>,

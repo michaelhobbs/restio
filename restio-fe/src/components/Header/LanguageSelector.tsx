@@ -28,43 +28,41 @@ function LanguageSelector(): JSX.Element {
     };
     return (
         <>
-            <div>
-                <Tooltip title={t('common.selectLanguage') ?? ''}>
-                    <Button
-                        aria-controls="language-menu"
-                        aria-haspopup="true"
-                        onClick={handleClick}
-                        color="inherit"
-                        endIcon={<ExpandMore />}
-                        startIcon={<Translate />}
-                    >
-                        {i18n.language}
-                    </Button>
-                </Tooltip>
-                <Menu
-                    id="language-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                    MenuListProps={{
-                        subheader: (
-                            <ListSubheader>
-                                {t('common.selectLanguage')}
-                            </ListSubheader>
-                        ),
-                    }}
+            <Tooltip title={t('common.selectLanguage') ?? ''}>
+                <Button
+                    aria-controls="language-menu"
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                    color="inherit"
+                    endIcon={<ExpandMore />}
+                    startIcon={<Translate />}
                 >
-                    {supportedLngs.map((lang) => (
-                        <MenuItem
-                            key={lang.langCode}
-                            onClick={() => changeLanguage(lang.langCode)}
-                        >
-                            {lang.displayName}
-                        </MenuItem>
-                    ))}
-                </Menu>
-            </div>
+                    {i18n.language}
+                </Button>
+            </Tooltip>
+            <Menu
+                id="language-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                MenuListProps={{
+                    subheader: (
+                        <ListSubheader>
+                            {t('common.selectLanguage')}
+                        </ListSubheader>
+                    ),
+                }}
+            >
+                {supportedLngs.map((lang) => (
+                    <MenuItem
+                        key={lang.langCode}
+                        onClick={() => changeLanguage(lang.langCode)}
+                    >
+                        {lang.displayName}
+                    </MenuItem>
+                ))}
+            </Menu>
         </>
     );
 }

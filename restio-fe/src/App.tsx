@@ -1,4 +1,5 @@
 import { CssBaseline, useMediaQuery } from '@material-ui/core';
+import { deDE, enUS } from '@material-ui/core/locale';
 import {
     createTheme,
     StyledEngineProvider,
@@ -6,8 +7,8 @@ import {
     ThemeProvider,
 } from '@material-ui/core/styles';
 import { createContext, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch } from 'react-router-dom';
-import AppSuspense from './components/AppSuspense';
 import Login from './components/Auth/Login';
 import { PrivateRoute } from './components/Auth/PrivateRoute';
 import SignUp from './components/Auth/Signup';
@@ -27,6 +28,9 @@ export const ColorModeContext = createContext({
 });
 
 function App(): JSX.Element {
+    const {
+        i18n: { language },
+    } = useTranslation();
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
     const [mode, setMode] = useState<'light' | 'dark'>(
         prefersDarkMode ? 'dark' : 'light'
@@ -44,18 +48,21 @@ function App(): JSX.Element {
 
     const theme = useMemo(
         () =>
-            createTheme({
-                palette: {
-                    mode,
-                    primary: {
-                        main: mode === 'light' ? '#333' : '#eee',
-                    },
-                    secondary: {
-                        main: mode === 'light' ? '#ccc' : '#666',
+            createTheme(
+                {
+                    palette: {
+                        mode,
+                        primary: {
+                            main: mode === 'light' ? '#333' : '#eee',
+                        },
+                        secondary: {
+                            main: mode === 'light' ? '#ccc' : '#666',
+                        },
                     },
                 },
-            }),
-        [mode]
+                language.startsWith('en') ? enUS : deDE
+            ),
+        [mode, language]
     );
     return (
         <StyledEngineProvider injectFirst>
@@ -63,26 +70,20 @@ function App(): JSX.Element {
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
                     <ErrorBoundary>
-                        <AppSuspense>
-                            <>
-                                <Header />
-                                <Switch>
-                                    <Route
-                                        exact
-                                        path="/signup"
-                                        component={SignUp}
-                                    />
-                                    <Route
-                                        exact
-                                        path="/login"
-                                        component={Login}
-                                    />
-                                    <PrivateRoute path="/">
-                                        <Home />
-                                    </PrivateRoute>
-                                </Switch>
-                            </>
-                        </AppSuspense>
+                        <>
+                            <Header />
+                            <Switch>
+                                <Route
+                                    exact
+                                    path="/signup"
+                                    component={SignUp}
+                                />
+                                <Route exact path="/login" component={Login} />
+                                <PrivateRoute path="/">
+                                    <Home />
+                                </PrivateRoute>
+                            </Switch>
+                        </>
                     </ErrorBoundary>
                 </ThemeProvider>
             </ColorModeContext.Provider>

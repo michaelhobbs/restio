@@ -4,7 +4,7 @@ import Brightness7Icon from '@material-ui/icons/Brightness7';
 import { useContext } from 'react';
 import { ColorModeContext } from '../../App';
 
-export function ColorModeToggle() {
+export function ColorModeToggle(): JSX.Element {
     const theme = useTheme();
     const colorMode = useContext(ColorModeContext);
     return (
