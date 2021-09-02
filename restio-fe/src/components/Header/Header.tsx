@@ -12,6 +12,7 @@ import makeStyles from '@material-ui/styles/makeStyles';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import Logout from '../Auth/Logout';
+import { ColorModeToggle } from './ColorModeToggle';
 import LanguageSelector from './LanguageSelector';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -49,6 +50,7 @@ function Header(): JSX.Element {
                         <Typography variant="h6" className={classes.title}>
                             {t('app.name')}
                         </Typography>
+                        <ColorModeToggle />
                         <LanguageSelector />
                         <Logout />
                     </Toolbar>

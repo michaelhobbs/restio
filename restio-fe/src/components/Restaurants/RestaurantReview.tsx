@@ -1,10 +1,9 @@
 import { Avatar, Box, Theme, Tooltip, Typography } from '@material-ui/core';
+import { Reply } from '@material-ui/icons';
 import createStyles from '@material-ui/styles/createStyles';
 import makeStyles from '@material-ui/styles/makeStyles';
-import { Reply } from '@material-ui/icons';
 import { Review } from '../../rtk-query/api';
 import RestaurantRating from './RestaurantRating';
-import { grey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -36,7 +35,7 @@ export const RestaurantReview = ({ review }: ReviewProps): JSX.Element => {
                 </Typography>
             </Box>
             {review.reply && (
-                <Box display="flex" p={1} bgcolor={grey[200]}>
+                <Box display="flex" p={1} bgcolor="background.paper">
                     <Box mr={2}>
                         <Tooltip title="Owner reply">
                             <Avatar alt="Owner reply" className={classes.small}>

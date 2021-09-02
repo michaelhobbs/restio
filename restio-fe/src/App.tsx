@@ -1,11 +1,11 @@
-import { useMediaQuery } from '@material-ui/core';
+import { CssBaseline, useMediaQuery } from '@material-ui/core';
 import {
     createTheme,
     StyledEngineProvider,
     Theme,
     ThemeProvider,
 } from '@material-ui/core/styles';
-import { useMemo } from 'react';
+import { createContext, useMemo, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import AppSuspense from './components/AppSuspense';
 import Login from './components/Auth/Login';
@@ -20,46 +20,72 @@ declare module '@material-ui/styles/defaultTheme' {
     interface DefaultTheme extends Theme {}
 }
 
+export const ColorModeContext = createContext({
+    toggleColorMode: () => {
+        // do nothing
+    },
+});
+
 function App(): JSX.Element {
     const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+    const [mode, setMode] = useState<'light' | 'dark'>(
+        prefersDarkMode ? 'dark' : 'light'
+    );
+    const colorMode = useMemo(
+        () => ({
+            toggleColorMode: () => {
+                setMode((prevMode) =>
+                    prevMode === 'light' ? 'dark' : 'light'
+                );
+            },
+        }),
+        []
+    );
 
     const theme = useMemo(
         () =>
             createTheme({
                 palette: {
-                    mode: prefersDarkMode ? 'dark' : 'light',
+                    mode,
                     primary: {
-                        main: '#333',
+                        main: mode === 'light' ? '#333' : '#eee',
                     },
                     secondary: {
-                        main: '#ccc',
+                        main: mode === 'light' ? '#ccc' : '#666',
                     },
                 },
             }),
-        [prefersDarkMode]
+        [mode]
     );
     return (
         <StyledEngineProvider injectFirst>
-            <ThemeProvider theme={theme}>
-                <ErrorBoundary>
-                    <AppSuspense>
-                        <>
-                            <Header />
-                            <Switch>
-                                <Route
-                                    exact
-                                    path="/signup"
-                                    component={SignUp}
-                                />
-                                <Route exact path="/login" component={Login} />
-                                <PrivateRoute path="/">
-                                    <Home />
-                                </PrivateRoute>
-                            </Switch>
-                        </>
-                    </AppSuspense>
-                </ErrorBoundary>
-            </ThemeProvider>
+            <ColorModeContext.Provider value={colorMode}>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <ErrorBoundary>
+                        <AppSuspense>
+                            <>
+                                <Header />
+                                <Switch>
+                                    <Route
+                                        exact
+                                        path="/signup"
+                                        component={SignUp}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/login"
+                                        component={Login}
+                                    />
+                                    <PrivateRoute path="/">
+                                        <Home />
+                                    </PrivateRoute>
+                                </Switch>
+                            </>
+                        </AppSuspense>
+                    </ErrorBoundary>
+                </ThemeProvider>
+            </ColorModeContext.Provider>
         </StyledEngineProvider>
     );
 }
