@@ -1,0 +1,1316 @@
+openapi: 3.0.0
+info:
+    description: Restaurant Review API
+    title: Restio API
+    version: 0.0.0
+servers:
+    - description: JSON-server defaul
+      url: http://localhost:4000/api/v1
+    - description: JSON-server custom
+      url: http://localhost:4001/api/v1
+    - description: Wiremock
+      url: http://localhost:8080/api/v1
+paths:
+    /auth/login:
+        post:
+            operationId: login
+            requestBody:
+                $ref: '#/components/requestBodies/UserCredentials'
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserAuth'
+                    description: successful operation
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Invalid username/password supplied
+            summary: Logs user into the system
+            tags:
+                - auth
+            x-eov-operation-handler: controllers/AuthController
+    /auth/logout:
+        get:
+            operationId: logout
+            responses:
+                '200':
+                    description: successful operation
+            security:
+                - BearerAuth: []
+            summary: Logs out current logged in user
+            tags:
+                - auth
+            x-eov-operation-handler: controllers/AuthController
+    /auth/signup:
+        post:
+            operationId: signUp
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserSignUpCredentials'
+                description: A JSON object containing user credentials
+                required: true
+            responses:
+                '201':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserAuth'
+                    description: Created
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            summary: Sign up a new User
+            tags:
+                - auth
+            x-eov-operation-handler: controllers/AuthController
+    /users:
+        get:
+            operationId: getUsers
+            parameters:
+                - description: The page index to return.
+                  explode: true
+                  in: query
+                  name: _page
+                  required: false
+                  schema:
+                      default: 0
+                      format: int32
+                      type: integer
+                  style: form
+                - description: The number of records to return in paginated response.
+                  explode: true
+                  in: query
+                  name: _limit
+                  required: false
+                  schema:
+                      default: 10
+                      format: int32
+                      type: integer
+                  style: form
+                - content:
+                      application/json:
+                          schema:
+                              $ref: '#/components/schemas/User'
+                  in: query
+                  name: filter
+                  required: false
+                - description:
+                      Field on which to sort, prefixed with '-' to indicate descending
+                      order
+                  example: -id
+                  explode: true
+                  in: query
+                  name: sort
+                  required: false
+                  schema:
+                      type: string
+                  style: form
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    users:
+                                        description: The list of users.
+                                        items:
+                                            $ref: '#/components/schemas/User'
+                                        title: users
+                                        type: array
+                                    pagination:
+                                        $ref: '#/components/schemas/Pagination'
+                    description: The list of Users and pagination properties.
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                '403':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Forbidden
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth:
+                      - Admin
+            summary: Gets all Users. Paginated.
+            tags:
+                - users
+            x-eov-operation-handler: controllers/UsersController
+        post:
+            deprecated: true
+            operationId: postUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UserSignUpCredentials'
+                description: A JSON object containing user credentials
+                required: true
+            responses:
+                '201':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserAuth'
+                    description: Created
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            summary: Create a new User
+            tags:
+                - users
+            x-eov-operation-handler: controllers/UsersController
+    /users/{userId}:
+        delete:
+            operationId: deleteUser
+            parameters:
+                - description: The ID of the user.
+                  explode: false
+                  in: path
+                  name: userId
+                  required: true
+                  schema:
+                      format: int32
+                      minimum: 1
+                      type: integer
+                  style: simple
+            responses:
+                '200':
+                    description: Deleted
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                '403':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Forbidden
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth:
+                      - Admin
+            summary: Delete a user.
+            tags:
+                - users
+            x-eov-operation-handler: controllers/UsersController
+        put:
+            operationId: updateUser
+            parameters:
+                - description: The ID of the user.
+                  explode: false
+                  in: path
+                  name: userId
+                  required: true
+                  schema:
+                      format: int32
+                      minimum: 1
+                      type: integer
+                  style: simple
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/User'
+                description: A JSON object containing the User
+                required: true
+            responses:
+                '200':
+                    description: Updated
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                '403':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Forbidden
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth:
+                      - Admin
+            summary: Update a user.
+            tags:
+                - users
+            x-eov-operation-handler: controllers/UsersController
+    /users/login:
+        post:
+            deprecated: true
+            operationId: loginUser
+            requestBody:
+                $ref: '#/components/requestBodies/UserCredentials'
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserAuth'
+                    description: successful operation
+                    headers:
+                        X-Rate-Limit:
+                            description: calls per hour allowed by the user
+                            explode: false
+                            schema:
+                                format: int32
+                                type: integer
+                            style: simple
+                        X-Expires-After:
+                            description: date in UTC when token expires
+                            explode: false
+                            schema:
+                                format: date-time
+                                type: string
+                            style: simple
+                '400':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Invalid username/password supplied
+            summary: Logs user into the system
+            tags:
+                - users
+            x-eov-operation-handler: controllers/UsersController
+    /users/logout:
+        get:
+            deprecated: true
+            operationId: logoutUser
+            responses:
+                '200':
+                    description: successful operation
+            security:
+                - BearerAuth: []
+            summary: Logs out current logged in user session
+            tags:
+                - users
+            x-eov-operation-handler: controllers/UsersController
+    /restaurants:
+        get:
+            operationId: getRestaurants
+            parameters:
+                - description:
+                      Filter applied to average rating of restaurants. Only restaurants
+                      with an average rating >= to minRating are returned.
+                  explode: true
+                  in: query
+                  name: minRating
+                  required: false
+                  schema:
+                      example: 2
+                      format: int32
+                      maximum: 5
+                      minimum: 0
+                      type: integer
+                  style: form
+                - description: The page index to return.
+                  explode: true
+                  in: query
+                  name: _page
+                  required: false
+                  schema:
+                      default: 0
+                      format: int32
+                      type: integer
+                  style: form
+                - description: The number of records to return in paginated response.
+                  explode: true
+                  in: query
+                  name: _limit
+                  required: false
+                  schema:
+                      default: 10
+                      format: int32
+                      type: integer
+                  style: form
+                - in: query
+                  name: filter
+                  content:
+                      application/json:
+                          schema:
+                              $ref: '#/components/schemas/Restaurant'
+                  required: false
+                - description:
+                      Field on which to sort, prefixed with '-' to indicate descending
+                      order
+                  example: -id
+                  explode: true
+                  in: query
+                  name: sort
+                  required: false
+                  schema:
+                      type: string
+                  style: form
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    restaurants:
+                                        description: The list of restaurants.
+                                        items:
+                                            $ref: '#/components/schemas/Restaurant'
+                                        title: restaurants
+                                        type: array
+                                    pagination:
+                                        $ref: '#/components/schemas/Pagination'
+                    description: The list of restaurants and pagination properties.
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth: []
+            summary:
+                Returns the sorted list (by average rating) of restaurants that the
+                authenticated user has permission to see.
+            tags:
+                - restaurants
+            x-eov-operation-handler: controllers/RestaurantsController
+        post:
+            operationId: postRestaurant
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RestaurantNew'
+                description: A JSON object containing the new restaurant
+                required: true
+            responses:
+                '201':
+                    description: Created
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth:
+                      - Owner
+            summary: Create a restaurant. Owner role only.
+            tags:
+                - restaurants
+            x-eov-operation-handler: controllers/RestaurantsController
+    /restaurants/{restaurantId}:
+        delete:
+            operationId: deleteRestaurant
+            parameters:
+                - description: The ID of the restaurant.
+                  explode: false
+                  in: path
+                  name: restaurantId
+                  required: true
+                  schema:
+                      format: int32
+                      minimum: 1
+                      type: integer
+                  style: simple
+            responses:
+                '200':
+                    description: Deleted
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                '403':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Forbidden
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth:
+                      - Admin
+            summary: Delete a restaurant.
+            tags:
+                - restaurants
+            x-eov-operation-handler: controllers/RestaurantsController
+        get:
+            operationId: getRestaurantById
+            parameters:
+                - description: The ID of the restaurant to return.
+                  explode: false
+                  in: path
+                  name: restaurantId
+                  required: true
+                  schema:
+                      format: int32
+                      minimum: 1
+                      type: integer
+                  style: simple
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RestaurantDetails'
+                    description: The restaurant with matching id.
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth: []
+            summary: Returns a restaurant by id.
+            tags:
+                - restaurants
+            x-eov-operation-handler: controllers/RestaurantsController
+        put:
+            operationId: updateRestaurant
+            parameters:
+                - description: The ID of the restaurant.
+                  explode: false
+                  in: path
+                  name: restaurantId
+                  required: true
+                  schema:
+                      format: int32
+                      minimum: 1
+                      type: integer
+                  style: simple
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RestaurantBase'
+                description: A JSON object containing the new restaurant
+                required: true
+            responses:
+                '200':
+                    description: Updated
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                '403':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Forbidden
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth:
+                      - Admin
+            summary: Update a restaurant.
+            tags:
+                - restaurants
+            x-eov-operation-handler: controllers/RestaurantsController
+    /restaurants/{restaurantId}/pendingReviews:
+        get:
+            operationId: getRestaurantPendingReviews
+            parameters:
+                - description: The ID of the restaurant.
+                  explode: false
+                  in: path
+                  name: restaurantId
+                  required: true
+                  schema:
+                      format: int32
+                      minimum: 1
+                      type: integer
+                  style: simple
+                - description: The page index to return.
+                  explode: true
+                  in: query
+                  name: _page
+                  required: false
+                  schema:
+                      default: 0
+                      format: int32
+                      type: integer
+                  style: form
+                - description: The number of records to return in paginated response.
+                  explode: true
+                  in: query
+                  name: _limit
+                  required: false
+                  schema:
+                      default: 10
+                      format: int32
+                      type: integer
+                  style: form
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PendingReviews'
+                    description: Paginated reviews pending a reply from the owner.
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                '403':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Forbidden
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth:
+                      - Owner
+            summary: Returns a list of unanswered reviews for a restaurant.
+            tags:
+                - restaurants
+                - reviews
+            x-eov-operation-handler: controllers/RestaurantsController
+    /restaurants/{restaurantId}/reviews:
+        get:
+            operationId: getRestaurantReviews
+            parameters:
+                - description: The ID of the restaurant.
+                  explode: false
+                  in: path
+                  name: restaurantId
+                  required: true
+                  schema:
+                      format: int32
+                      minimum: 1
+                      type: integer
+                  style: simple
+                - description: The page index to return.
+                  explode: true
+                  in: query
+                  name: _page
+                  required: false
+                  schema:
+                      default: 0
+                      format: int32
+                      type: integer
+                  style: form
+                - description: The number of records to return in paginated response.
+                  explode: true
+                  in: query
+                  name: _limit
+                  required: false
+                  schema:
+                      default: 10
+                      format: int32
+                      type: integer
+                  style: form
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Reviews'
+                    description: Paginated reviews.
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                '403':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Forbidden
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth:
+                      - User
+            summary: Returns a list of reviews for a restaurant.
+            tags:
+                - restaurants
+                - reviews
+            x-eov-operation-handler: controllers/RestaurantsController
+        post:
+            operationId: postReview
+            parameters:
+                - description: The ID of the restaurant.
+                  explode: false
+                  in: path
+                  name: restaurantId
+                  required: true
+                  schema:
+                      format: int32
+                      minimum: 1
+                      type: integer
+                  style: simple
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ReviewBase'
+                description: A JSON object containing user review
+                required: true
+            responses:
+                '201':
+                    description: Created
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth:
+                      - User
+            summary: Create a review for a restaurant.
+            tags:
+                - restaurants
+                - reviews
+            x-eov-operation-handler: controllers/RestaurantsController
+    /reviews:
+        get:
+            operationId: getReviews
+            parameters:
+                - description: The page index to return.
+                  explode: true
+                  in: query
+                  name: _page
+                  required: false
+                  schema:
+                      default: 0
+                      format: int32
+                      type: integer
+                  style: form
+                - description: The number of records to return in paginated response.
+                  explode: true
+                  in: query
+                  name: _limit
+                  required: false
+                  schema:
+                      default: 10
+                      format: int32
+                      type: integer
+                  style: form
+                - content:
+                      application/json:
+                          schema:
+                              $ref: '#/components/schemas/Review'
+                  in: query
+                  name: filter
+                  required: false
+                - description:
+                      Field on which to sort, prefixed with '-' to indicate descending
+                      order
+                  example: -id
+                  explode: true
+                  in: query
+                  name: sort
+                  required: false
+                  schema:
+                      type: string
+                  style: form
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                properties:
+                                    reviews:
+                                        description: The list of reviews.
+                                        items:
+                                            $ref: '#/components/schemas/Review'
+                                        title: reviews
+                                        type: array
+                                    pagination:
+                                        $ref: '#/components/schemas/Pagination'
+                    description: The list of Reviews and pagination properties.
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                '403':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Forbidden
+                '404':
+                    description: A user with the specified ID was not found.
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth:
+                      - Admin
+            summary: Gets all Reviews. Paginated.
+            tags:
+                - reviews
+            x-eov-operation-handler: controllers/ReviewsController
+    /reviews/{reviewId}:
+        delete:
+            operationId: deleteReview
+            parameters:
+                - description: The ID of the review.
+                  explode: false
+                  in: path
+                  name: reviewId
+                  required: true
+                  schema:
+                      format: int32
+                      minimum: 1
+                      type: integer
+                  style: simple
+            responses:
+                '200':
+                    description: Deleted
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                '403':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Forbidden
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth:
+                      - Admin
+            summary: Delete a review.
+            tags:
+                - reviews
+            x-eov-operation-handler: controllers/ReviewsController
+        put:
+            operationId: updateReview
+            parameters:
+                - description: The ID of the review.
+                  explode: false
+                  in: path
+                  name: reviewId
+                  required: true
+                  schema:
+                      format: int32
+                      minimum: 1
+                      type: integer
+                  style: simple
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Review'
+                description: A JSON object containing the Review
+                required: true
+            responses:
+                '200':
+                    description: Updated
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                '403':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Forbidden
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth:
+                      - Admin
+            summary: Update a review.
+            tags:
+                - reviews
+            x-eov-operation-handler: controllers/ReviewsController
+    /reviews/{reviewId}/reply:
+        post:
+            operationId: postReply
+            parameters:
+                - description: The ID of the review.
+                  explode: false
+                  in: path
+                  name: reviewId
+                  required: true
+                  schema:
+                      format: int32
+                      minimum: 1
+                      type: integer
+                  style: simple
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Reply'
+                description: A JSON object containing owner reply
+                required: true
+            responses:
+                '201':
+                    description: Created
+                '401':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Access token is missing or invalid
+                '403':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Forbidden
+                default:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Error'
+                    description: Unexpected error
+            security:
+                - BearerAuth:
+                      - Owner
+            summary: Create an Owner reply for a review.
+            tags:
+                - reviews
+            x-eov-operation-handler: controllers/ReviewsController
+components:
+    parameters:
+        limitParam:
+            description: The number of records to return in paginated response.
+            explode: true
+            in: query
+            name: _limit
+            required: false
+            schema:
+                default: 10
+                format: int32
+                type: integer
+            style: form
+        pageParam:
+            description: The page index to return.
+            explode: true
+            in: query
+            name: _page
+            required: false
+            schema:
+                default: 0
+                format: int32
+                type: integer
+            style: form
+    requestBodies:
+        UserCredentials:
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/UserCredentials'
+            description: A JSON object containing user credentials
+            required: true
+    responses:
+        ForbiddenError:
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Error'
+            description: Forbidden
+        UnauthorizedError:
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Error'
+            description: Access token is missing or invalid
+        UnknownError:
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Error'
+            description: Unexpected error
+    schemas:
+        User:
+            example:
+                role: User
+                name: John Doe
+                id: 10
+                email: user@example.com
+            properties:
+                name:
+                    example: John Doe
+                    type: string
+                email:
+                    example: user@example.com
+                    format: email
+                    type: string
+                id:
+                    example: 10
+                    format: int32
+                    minimum: 1
+                    type: integer
+                role:
+                    enum:
+                        - User
+                        - Owner
+                        - Admin
+                    example: User
+                    type: string
+            required:
+                - email
+                - id
+                - name
+                - role
+            title: User
+            type: object
+        UserAuth:
+            example:
+                user:
+                    role: User
+                    name: John Doe
+                    id: 10
+                    email: user@example.com
+                token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlIjoiVXNlciJ9.Mmtp-X5iBnsrfEUQEHrOkcW8VCuqUOKdsuyCHJpz8E0
+            properties:
+                user:
+                    $ref: '#/components/schemas/User'
+                token:
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlIjoiVXNlciJ9.Mmtp-X5iBnsrfEUQEHrOkcW8VCuqUOKdsuyCHJpz8E0
+                    type: string
+            required:
+                - token
+                - user
+            title: UserAuth
+            type: object
+        UserCredentials:
+            example:
+                password: password
+                name: John Doe
+            properties:
+                name:
+                    description: The user name / email for login
+                    example: John Doe
+                    type: string
+                password:
+                    description: The password for login in clear text
+                    example: password
+                    format: password
+                    type: string
+            required:
+                - name
+                - password
+            title: UserCredentials
+            type: object
+        UserSignUpCredentials:
+            allOf:
+                - $ref: '#/components/schemas/UserSignUpCredentials_allOf'
+                - $ref: '#/components/schemas/UserCredentials'
+            title: UserSignUpCredentials
+        Error:
+            properties:
+                code:
+                    example: Error-101
+                    type: string
+                message:
+                    example: An error occurred. Please try again later.
+                    type: string
+            required:
+                - code
+                - message
+            title: Error
+            type: object
+        RestaurantNew:
+            example:
+                name: Pizza Hut
+            properties:
+                name:
+                    example: Pizza Hut
+                    type: string
+            required:
+                - name
+            title: RestaurantNew
+            type: object
+        RestaurantBase:
+            example:
+                name: Pizza Hut
+                ownerId: 10
+            properties:
+                name:
+                    example: Pizza Hut
+                    type: string
+                ownerId:
+                    example: 10
+                    format: int32
+                    minimum: 1
+                    type: integer
+            required:
+                - name
+                - ownerId
+            title: RestaurantBase
+            type: object
+        Restaurant:
+            allOf:
+                - $ref: '#/components/schemas/RestaurantBase'
+                - $ref: '#/components/schemas/Restaurant_allOf'
+            title: Restaurant
+            type: object
+        ReviewBase:
+            description: The user's review input. Used to create reviews.
+            example:
+                rating: 4
+                comment: The food was excellent.
+            properties:
+                rating:
+                    example: 4
+                    format: int32
+                    maximum: 5
+                    minimum: 0
+                    type: integer
+                comment:
+                    description: user review text
+                    example: The food was excellent.
+                    type: string
+            required:
+                - comment
+                - rating
+            title: ReviewBase
+            type: object
+        Reply:
+            description: Owner's reply to a review,
+            example:
+                reply: reply
+            properties:
+                reply:
+                    type: string
+            required:
+                - reply
+            title: Reply
+            type: object
+        Review:
+            allOf:
+                - $ref: '#/components/schemas/Review_allOf'
+                - $ref: '#/components/schemas/ReviewBase'
+            description:
+                Reviews are given to restaurants by users. They can be replied
+                to by the owner of the restaurant.
+            title: Review
+            type: object
+        Pagination:
+            description: Used to manage pagination
+            example:
+                total_count: 250
+            properties:
+                total_count:
+                    description: Total number of pages available.
+                    example: 250
+                    format: int32
+                    type: integer
+            required:
+                - total_count
+            title: Pagination
+            type: object
+        RestaurantDetails:
+            example: {}
+            properties:
+                restaurant:
+                    $ref: '#/components/schemas/Restaurant'
+                highestReview:
+                    $ref: '#/components/schemas/Review'
+                lowestReview:
+                    $ref: '#/components/schemas/Review'
+            required:
+                - restaurant
+                - reviews
+            title: RestaurantDetails
+            type: object
+        PendingReviews:
+            example:
+                pagination:
+                    total_count: 250
+                reviews:
+                    - null
+                    - null
+            properties:
+                reviews:
+                    items:
+                        $ref: '#/components/schemas/Review'
+                    type: array
+                pagination:
+                    $ref: '#/components/schemas/Pagination'
+            required:
+                - reviews
+            title: PendingReviews
+            type: object
+        Reviews:
+            example:
+                pagination:
+                    total_count: 250
+                reviews:
+                    - null
+                    - null
+            properties:
+                reviews:
+                    items:
+                        $ref: '#/components/schemas/Review'
+                    type: array
+                pagination:
+                    $ref: '#/components/schemas/Pagination'
+            required:
+                - reviews
+            title: Reviews
+            type: object
+        UserSignUpCredentials_allOf:
+            properties:
+                email:
+                    description: The email for the new user
+                    example: user@example.com
+                    format: email
+                    type: string
+            required:
+                - email
+            type: object
+        Restaurant_allOf:
+            properties:
+                id:
+                    example: 10
+                    format: int32
+                    minimum: 1
+                    type: integer
+                avg_rating:
+                    example: 4.75
+                    format: double
+                    maximum: 5
+                    minimum: 0
+                    type: number
+                pendingReplies:
+                    description:
+                        Users with `Owner` role receive this optional property, which
+                        indicates how many reviews are waiting for a reply from them. `User` role
+                        users will not receive this property.
+                    example: 10
+                    format: int32
+                    minimum: 0
+                    type: integer
+            required:
+                - id
+                - name
+            type: object
+        Review_allOf:
+            properties:
+                id:
+                    example: 10
+                    format: int32
+                    minimum: 1
+                    type: integer
+                date:
+                    description: Date of visit in ISO 8601
+                    example: 2017-07-21
+                    format: date
+                    type: string
+                reply:
+                    description: Owner's reply to the review.
+                    example: Thank you for your visit.
+                    type: string
+            required:
+                - date
+                - id
+            type: object
+    securitySchemes:
+        BearerAuth:
+            bearerFormat: JWT
+            scheme: bearer
+            type: http
