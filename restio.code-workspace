@@ -1,0 +1,14 @@
+{
+  "folders": [
+    {
+      "path": "./restio-fe"
+    },
+    {
+      "path": "./restio-be/deno-deploy"
+    },
+    {
+      "path": "./restio-be/nodejs-express"
+    }
+  ],
+  "settings": {}
+}
