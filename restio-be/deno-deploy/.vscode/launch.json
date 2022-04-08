@@ -8,10 +8,16 @@
       "request": "launch",
       "name": "Launch Program",
       "type": "pwa-node",
-      "program": "${workspaceFolder}/main.ts",
+      "program": "${workspaceFolder}/testing_deno_import.ts",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "deno",
-      "runtimeArgs": ["run", "--unstable", "--inspect", "--allow-all"],
+      "runtimeArgs": [
+        "run",
+        "--unstable",
+        "--inspect",
+        "--allow-all",
+        "--compat"
+      ],
       "attachSimplePort": 9229
     }
   ]

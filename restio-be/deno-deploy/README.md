@@ -17,3 +17,8 @@ deno run -A main.ts
 To run in VS Code, install the Deno Extension, then open the code as a Workspace. This tells VS Code which project is a Deno project.
 
 Open in browser: http://localhost:8000/restaurants
+
+## Known Issues
+
+Deno cannot run fireabse-admin due to the crypto library of nodejs not being deno-compatible.  
+see [node_modules/firebase-admin/lib/utils/crypto-signer.js](node_modules/firebase-admin/lib/utils/crypto-signer.js)
