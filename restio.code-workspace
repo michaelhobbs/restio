@@ -10,5 +10,9 @@
       "path": "./restio-be/nodejs-express"
     }
   ],
-  "settings": {}
+  "settings": {
+    "deno.enable": true,
+    "deno.lint": true,
+    "deno.unstable": true
+  }
 }

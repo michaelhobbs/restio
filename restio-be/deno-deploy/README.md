@@ -8,6 +8,7 @@ Types have been fixed, project setup have been extended to run locally, dotenv h
 
 - Install deno.
 - Create Firebase account, project, collection, user, copy secrets into `.env.template` and rename to `.env`
+- Create a service account for the DB and place credentials in `./firebase-adminsdk-credentials.json`
 - Run Project
 
 ```bash

@@ -55,9 +55,42 @@ const HOST = env.HOST || 'localhost';
 const FIREBASE_CONFIG = env.FIREBASE_CONFIG;
 const FIREBASE_USERNAME = env.FIREBASE_USERNAME;
 const FIREBASE_PASSWORD = env.FIREBASE_PASSWORD;
+// const GOOGLE_APPLICATION_CREDENTIALS = env.GOOGLE_APPLICATION_CREDENTIALS;
 if (!FIREBASE_CONFIG || !FIREBASE_USERNAME || !FIREBASE_PASSWORD) {
   throw Error('Missing Environemnt Variables');
 }
+
+// /**
+//  * We ensure that our technical user, defined in our Environment Variables, has the admin Role.
+//  * This is a custom Claim that all users have.
+//  * We will set rules on the Firebase DB and various of our API endpoints which restrict access
+//  * based on the user's Role.
+//  */
+// import admin from 'https://cdn.skypack.dev/firebase-admin@v10.0.2?dts';
+
+// const text = await Deno.readTextFile(GOOGLE_APPLICATION_CREDENTIALS);
+// const adminKey = JSON.parse(text);
+
+// admin.initializeApp({
+//   credential: adminKey,
+// });
+
+// const adminAuth = admin.auth();
+// adminAuth
+//   .getUserByEmail('user@admin.example.com')
+//   .then((user) => {
+//     // Add incremental custom claim without overwriting existing claims.
+//     const currentCustomClaims = user.customClaims;
+//     if (currentCustomClaims?.['admin']) {
+//       // Add level.
+//       currentCustomClaims['accessLevel'] = 10;
+//       // Add custom claims for additional privileges.
+//       return adminAuth.setCustomUserClaims(user.uid, currentCustomClaims);
+//     }
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
 
 /**
  * Now we need to setup our Firebase application. We will be getting the configuration from
@@ -182,7 +215,7 @@ const errorHandler = async (ctx: Context, next: () => Promise<unknown>) => {
 /**
  * Middleware to catch requests without matching handler.
  */
-const notFound = async (ctx: Context) => {
+const notFound = (ctx: Context) => {
   ctx.response.status = 404;
   ctx.response.body = { msg: 'Not Found' };
 };
